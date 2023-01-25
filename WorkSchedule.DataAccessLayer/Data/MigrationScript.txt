@@ -1,0 +1,2 @@
+﻿dotnet ef migrations add Initial -c WorkScheduleDbContext -o Data/Migrations/WorkSchedule --startup-project ../WorkSchedule.WebAPI/WorkSchedule.WebAPI.csproj
+dotnet ef database update -c WorkScheduleDbContext --startup-project ../WorkSchedule.WebAPI/WorkSchedule.WebAPI.csproj
