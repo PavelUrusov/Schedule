@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WorkSchedule.DataAccessLayer.Database;
@@ -11,9 +12,10 @@ using WorkSchedule.DataAccessLayer.Database;
 namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
 {
     [DbContext(typeof(WorkScheduleDbContext))]
-    partial class WorkScheduleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230130205041_AddRefreshTokenEntity")]
+    partial class AddRefreshTokenEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,7 +71,7 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
                     b.ToTable("Employees", (string)null);
                 });
 
-            modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.RefreshToken", b =>
+            modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.RefreshTokens", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,12 +79,13 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("ExpireAtUnixTimeSecUtc")
+                    b.Property<long>("CreatedTokenUnixTimeSecondsUtc")
                         .HasMaxLength(255)
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsValid")
-                        .HasColumnType("boolean");
+                    b.Property<long>("ExpiresTokenUnixTimeSecondsUtc")
+                        .HasMaxLength(255)
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -94,7 +97,8 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("RefreshTokens", (string)null);
                 });
@@ -274,11 +278,11 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
                     b.Navigation("WorkObject");
                 });
 
-            modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.RefreshToken", b =>
+            modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.RefreshTokens", b =>
                 {
                     b.HasOne("WorkSchedule.DataAccessLayer.Entities.User", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
+                        .WithOne("RefreshTokens")
+                        .HasForeignKey("WorkSchedule.DataAccessLayer.Entities.RefreshTokens", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

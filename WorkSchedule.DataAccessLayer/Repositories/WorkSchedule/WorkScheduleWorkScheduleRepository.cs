@@ -2,17 +2,17 @@
 using WorkSchedule.DataAccessLayer.Database;
 using WorkSchedule.DataAccessLayer.Entities;
 
-namespace WorkSchedule.DataAccessLayer.Repositories;
+namespace WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-public class WorkScheduleRepository<T, TKey> :
-    IRepository<T, TKey>
+public class WorkScheduleWorkScheduleRepository<T, TKey> :
+    IWorkScheduleRepository<T, TKey>
     where T : BaseEntity<TKey>, new()
     where TKey : struct
 {
     private readonly WorkScheduleDbContext _context;
     private readonly DbSet<T> _dbSet;
 
-    public WorkScheduleRepository(WorkScheduleDbContext context)
+    public WorkScheduleWorkScheduleRepository(WorkScheduleDbContext context)
     {
         _context = context;
         _dbSet = context.Set<T>();
@@ -24,7 +24,7 @@ public class WorkScheduleRepository<T, TKey> :
         await _context.SaveChangesAsync();
     }
 
-    public async Task<T?> GetByIdAsync(TKey id)
+    public async Task<T?> GetByIdAsync(object id)
     {
         return await _dbSet.FindAsync(id);
     }
@@ -48,6 +48,12 @@ public class WorkScheduleRepository<T, TKey> :
     public async Task DeleteAsync(T entity)
     {
         _dbSet.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteRangeAsync(IEnumerable<T> entities)
+    {
+        _dbSet.RemoveRange(entities);
         await _context.SaveChangesAsync();
     }
 }
