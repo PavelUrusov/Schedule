@@ -17,6 +17,7 @@ public static class IdentityServiceExtension
         services.AddScoped(typeof(IIdentityService), typeof(IdentityService));
         services.AddScoped(typeof(ITokenService), typeof(TokenService));
         services.AddScoped(typeof(IPasswordManager), typeof(PasswordManager));
+
         return services;
     }
 }

@@ -7,8 +7,8 @@ namespace WorkSchedule.BusinessLogicLayer.Services.Identity.IdentityService;
 
 public interface IIdentityService
 {
-    Task<ResponseBase> AddRoleAsync(AddRoleDto roleDto);
-    Task<ResponseBase> RegistrationAsync(RegisterUserDto registerDto);
-    Task<ResponseBase> LoginAsync(LoginUserDto loginUserDto);
-    Task<ResponseBase> RefreshAccessToken(TokenRequest token);
+    Task<ResponseBase> AddRoleAsync(AddRoleRequest roleRequest);
+    Task<ResponseBase> RegistrationAsync(RegisterUserRequest registerRequest);
+    Task<ResponseBase> LoginAsync(LoginUserRequest loginUserRequest);
+    Task<ResponseBase> RefreshToken(TokenRequest token);
 }

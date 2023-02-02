@@ -2,13 +2,13 @@
 
 namespace WorkSchedule.WebAPI.Controllers;
 
-[Route("WorkScheduleAPI/[controller]")]
+[Route("WorkScheduleAPI")]
 [ApiController]
 public class HelloWorldController : ControllerBase
 {
     [Route("[action]")]
     [HttpGet]
-    public IActionResult HelloWorld()
+    public IActionResult Hi()
     {
         return StatusCode(200, "Hello World!");
     }

@@ -11,6 +11,7 @@ public static class DatabaseContextExtension
         {
             opt.UseLazyLoadingProxies().UseNpgsql(connectionString);
         });
+
         return services;
     }
 }

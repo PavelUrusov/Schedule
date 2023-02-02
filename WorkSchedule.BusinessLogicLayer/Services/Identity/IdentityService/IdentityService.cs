@@ -29,9 +29,9 @@ public class IdentityService : IIdentityService
         _passwordManager = passwordManager;
     }
 
-    public virtual async Task<ResponseBase> LoginAsync(LoginUserDto loginUserDto)
+    public virtual async Task<ResponseBase> LoginAsync(LoginUserRequest loginUserRequest)
     {
-        var verifyCredentials = await VerifyUserCredentialsAsync(loginUserDto);
+        var verifyCredentials = await VerifyUserCredentialsAsync(loginUserRequest);
         if (verifyCredentials.IsUnsuccessful)
             return new ResponseBase(verifyCredentials.ErrorMessage, HttpStatusCode.BadRequest);
 
@@ -39,19 +39,21 @@ public class IdentityService : IIdentityService
         var userClaims = _userManager.GetUserClaims(user);
         var accessToken = _tokenService.CreateAccessToken(userClaims);
         var refreshToken = await _tokenService.CreateRefreshTokenForUserAsync(user);
+
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    public virtual async Task<ResponseBase> AddRoleAsync(AddRoleDto roleDto)
+    public virtual async Task<ResponseBase> AddRoleAsync(AddRoleRequest roleRequest)
     {
-        var role = new Role { Name = roleDto.Name };
+        var role = new Role { Name = roleRequest.Name };
         var result = await _roleManager.CreateRoleAsync(role);
+
         return result.IsSuccessful
             ? new ResponseBase()
             : new ResponseBase(result.ErrorMessage, HttpStatusCode.BadRequest);
     }
 
-    public virtual async Task<ResponseBase> RegistrationAsync(RegisterUserDto registerDto)
+    public virtual async Task<ResponseBase> RegistrationAsync(RegisterUserRequest registerRequest)
     {
         var existingRole = await _roleManager.FindByNameAsync(Roles.User);
         if (existingRole.IsUnsuccessful)
@@ -60,17 +62,18 @@ public class IdentityService : IIdentityService
         var user = new User
         {
             Roles = new List<Role> { existingRole.Data! },
-            Username = registerDto.Username,
-            Email = registerDto.Email,
+            Username = registerRequest.Username,
+            Email = registerRequest.Email,
             RegistrationUnixTimeSecondsUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
         };
-        var result = await _userManager.CreateNewUserAsync(user, registerDto.Password);
+        var result = await _userManager.CreateNewUserAsync(user, registerRequest.Password);
+
         return result.IsSuccessful
             ? new ResponseBase()
             : new ResponseBase(result.ErrorMessage, HttpStatusCode.BadRequest);
     }
 
-    public virtual async Task<ResponseBase> RefreshAccessToken(TokenRequest token)
+    public virtual async Task<ResponseBase> RefreshToken(TokenRequest token)
     {
         var result = _tokenService.GetAccessTokenPrincipalFromExpiredToken(token.AccessToken);
         if (result.IsUnsuccessful)
@@ -95,13 +98,14 @@ public class IdentityService : IIdentityService
         return new TokenResponse(accessToken, newRefreshToken);
     }
 
-    private async Task<Result<User?>> VerifyUserCredentialsAsync(LoginUserDto dto)
+    private async Task<Result<User?>> VerifyUserCredentialsAsync(LoginUserRequest request)
     {
-        var findEmail = await _userManager.FindUserByEmailAsync(dto.Email);
+        var findEmail = await _userManager.FindUserByEmailAsync(request.Email);
         if (findEmail.IsUnsuccessful)
             return new Result<User?>("Incorrect password or email");
 
-        var verifyPassword = _passwordManager.VerifyPassword(dto.Password, findEmail.Data!.Password);
+        var verifyPassword = _passwordManager.VerifyPassword(request.Password, findEmail.Data!.Password);
+
         return verifyPassword.IsSuccessful
             ? new Result<User?>(findEmail.Data)
             : new Result<User?>("Incorrect password or email");

@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using WorkSchedule.WebAPI.Utilities.Configs;
 
 namespace WorkSchedule.WebAPI.Utilities.Extensions.ToServiceCollection;
 
@@ -25,6 +26,7 @@ public static class BearerAuthenticationExtension
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(principal.SecretKey))
                     };
                 });
+
         return services;
     }
 }

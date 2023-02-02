@@ -18,8 +18,6 @@ public record Result
     public bool IsUnsuccessful => !IsSuccessful;
 }
 
-/*public record Result<T>(T? Data) : Result;*/
-
 public record Result<T> : Result
 {
     public Result(string? errorMessage) : base(errorMessage)

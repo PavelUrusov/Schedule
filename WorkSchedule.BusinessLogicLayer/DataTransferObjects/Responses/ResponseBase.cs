@@ -20,5 +20,5 @@ public record ResponseBase
 
 public record ResponseBase<T> : ResponseBase
 {
-    public T? Data { get; set; }
+    public T? Data { get; init; }
 }

@@ -1,6 +1,6 @@
-﻿namespace WorkSchedule.WebAPI.Utilities;
+﻿namespace WorkSchedule.WebAPI.Utilities.Configs;
 
-public class TokenValidationPrincipal
+public record TokenValidationPrincipal
 {
     public bool ValidateIssuer { get; set; }
     public bool ValidateAudience { get; set; }

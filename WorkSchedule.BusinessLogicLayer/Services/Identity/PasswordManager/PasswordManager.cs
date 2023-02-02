@@ -18,6 +18,7 @@ public class PasswordManager : IPasswordManager
         var salt = result.Take(16).ToArray();
         var storedHash = result.Skip(16).ToArray();
         var computedHash = _passwordEncryption.ComputeHash(password, salt);
+
         return storedHash.SequenceEqual(computedHash) is false
             ? new Result("Password not verified")
             : new Result();

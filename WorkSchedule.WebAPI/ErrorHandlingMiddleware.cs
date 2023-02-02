@@ -28,19 +28,19 @@ public class ErrorHandlingMiddleware
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 500;
+
         return context.Response.WriteAsync(new ErrorDetails
         {
             StatusCode = HttpStatusCode.InternalServerError,
             Message = exception.Message
-
         }.ToString());
     }
 }
 
-public class ErrorDetails
+public record ErrorDetails
 {
-    public HttpStatusCode StatusCode { get; set; }
-    public string Message { get; set; } = null!;
+    public HttpStatusCode StatusCode { get; init; }
+    public string Message { get; init; } = null!;
 
     public override string ToString()
     {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Role;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Token;
@@ -24,43 +23,39 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> RegistrationUser([FromBody] RegisterUserDto dto)
+    public async Task<IActionResult> RegistrationUser([FromBody] RegisterUserRequest request)
     {
-        var response = await _identityService.RegistrationAsync(dto);
+        var response = await _identityService.RegistrationAsync(request);
+
         return StatusCode((int)response.StatusCode, response);
     }
 
-    [Authorize(Policy = "Admin", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Policy = "Admin")]
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> AddRole([FromBody] AddRoleDto dto)
+    public async Task<IActionResult> AddRole([FromBody] AddRoleRequest request)
     {
-        var response = await _identityService.AddRoleAsync(dto);
+        var response = await _identityService.AddRoleAsync(request);
+
         return StatusCode((int)response.StatusCode, response);
     }
 
     [AllowAnonymous]
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> Login([FromBody] LoginUserDto loginUserDto)
+    public async Task<IActionResult> Login([FromBody] LoginUserRequest loginUserRequest)
     {
-        var response = await _identityService.LoginAsync(loginUserDto);
-        return StatusCode((int)response.StatusCode, response);
-    }
+        var response = await _identityService.LoginAsync(loginUserRequest);
 
-    [Route("[action]")]
-    [HttpGet]
-    [Authorize(Policy = "User", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> Test_Auth()
-    {
-        return StatusCode(200, "Hello Authorize User");
+        return StatusCode((int)response.StatusCode, response);
     }
 
     [Route("[action]")]
     [HttpPost]
     public async Task<IActionResult> RefreshToken([FromBody] TokenRequest token)
     {
-        var response = await _identityService.RefreshAccessToken(token);
+        var response = await _identityService.RefreshToken(token);
+
         return StatusCode((int)response.StatusCode, response);
     }
 }

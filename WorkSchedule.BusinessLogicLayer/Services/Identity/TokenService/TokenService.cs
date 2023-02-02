@@ -28,7 +28,7 @@ public class TokenService : ITokenService
             throw new ArgumentException("The secret key cannot be null, empty, or contain white spaces");
     }
 
-    public string CreateAccessToken(IEnumerable<Claim> claims)
+    public virtual string CreateAccessToken(IEnumerable<Claim> claims)
     {
         var securityKey = CreateSymmetricKey(_accessTokenPrincipal.SecretKey);
         var credentials = new SigningCredentials(securityKey, _accessTokenPrincipal.SecurityAlgorithms);
@@ -43,11 +43,12 @@ public class TokenService : ITokenService
 
         var secToken = new JwtSecurityToken(header, payload);
         var token = new JwtSecurityTokenHandler().WriteToken(secToken);
+
         return token;
     }
 
 
-    public async Task<string> CreateRefreshTokenForUserAsync(User user)
+    public virtual async Task<string> CreateRefreshTokenForUserAsync(User user)
     {
         var tokens = user.RefreshTokens.ToArray();
         if (tokens.Length > _refreshTokenPrincipal.MaximumTokensUser)
@@ -65,10 +66,11 @@ public class TokenService : ITokenService
             UserId = user.Id
         };
         await _tokenRepository.InsertAsync(refreshToken);
+
         return refreshToken.Token;
     }
 
-    public Result<ClaimsPrincipal?> GetAccessTokenPrincipalFromExpiredToken(string token)
+    public virtual Result<ClaimsPrincipal?> GetAccessTokenPrincipalFromExpiredToken(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
@@ -88,17 +90,20 @@ public class TokenService : ITokenService
         return new Result<ClaimsPrincipal?>(principal);
     }
 
-    public async Task<string> OverwriteRefreshTokenAsync(RefreshToken refreshToken)
+    public virtual async Task<string> OverwriteRefreshTokenAsync(RefreshToken refreshToken)
     {
         refreshToken.Token = GenerateRefreshToken();
         await _tokenRepository.UpdateAsync(refreshToken);
+
         return refreshToken.Token;
     }
+
     private string GenerateRefreshToken(int amountOfBytes = 32)
     {
         var randomNumber = new byte[amountOfBytes];
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
+
         return Convert.ToBase64String(randomNumber);
     }
 
@@ -121,11 +126,11 @@ public class TokenService : ITokenService
             .CreateQueryable()
             .Where(rf => rf.UserId == userId)
             .OrderBy(rf => rf.ExpireAtUnixTimeSecUtc)
-            .Take(5);
+            .Take(_refreshTokenPrincipal.MaximumTokensUser / 4);
         await _tokenRepository.DeleteRangeAsync(oldestTokens);
     }
 
-    private SymmetricSecurityKey CreateSymmetricKey(string secretKey)
+    protected SymmetricSecurityKey CreateSymmetricKey(string secretKey)
     {
         return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
     }

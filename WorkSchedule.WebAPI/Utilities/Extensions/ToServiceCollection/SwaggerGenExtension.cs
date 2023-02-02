@@ -39,6 +39,7 @@ public static class SwaggerGenExtension
                 }
             });
         });
+
         return services;
     }
 }

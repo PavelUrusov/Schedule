@@ -27,6 +27,7 @@ public class UserManager : IUserManager
         var normalizedEmail = email.Normalize();
         var user = await _userRepository.CreateQueryable()
             .SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail);
+
         return user is not null
             ? new Result<User?>(user)
             : new Result<User?>("User not found");
@@ -37,7 +38,9 @@ public class UserManager : IUserManager
         var result = await _userRepository.GetByIdAsync(user.Id);
         if (result is null)
             return new Result("User not found");
+
         await _userRepository.UpdateAsync(user);
+
         return new Result();
     }
 
@@ -55,22 +58,26 @@ public class UserManager : IUserManager
         var result = await FindUserByEmailAsync(user.Email);
         if (result.IsSuccessful)
             return new Result("Email is already registered");
+
         user.NormalizedEmail = user.Email.Normalize();
         user.Password = _passwordEncryptionService.EncryptPassword(password);
         await _userRepository.InsertAsync(user);
+
         return new Result();
     }
 
     public virtual async Task<Result> DeleteAsync(User user)
     {
         var result = await _userRepository.GetByIdAsync(user.Id);
-        if (result is null)
+        if (result is null) 
             return new Result("User not found");
+
         await _userRepository.DeleteAsync(user);
+
         return new Result();
     }
 
-    public IEnumerable<Claim> GetUserClaims(User user)
+    public virtual IEnumerable<Claim> GetUserClaims(User user)
     {
         var claims = new List<Claim>
         {
@@ -79,6 +86,7 @@ public class UserManager : IUserManager
             new(TypeUserClaims.Email, user.Email)
         };
         claims.AddRange(user.Roles.Select(x => new Claim(TypeUserClaims.Role, x.Name)));
+
         return claims;
     }
 }

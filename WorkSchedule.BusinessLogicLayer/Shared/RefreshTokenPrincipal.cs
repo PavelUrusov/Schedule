@@ -2,6 +2,6 @@
 
 public record RefreshTokenPrincipal
 {
-    public int TokenLifetimeInDays { get; set; }
-    public int MaximumTokensUser { get; set; }
+    public int TokenLifetimeInDays { get; init; }
+    public int MaximumTokensUser { get; init; }
 }
