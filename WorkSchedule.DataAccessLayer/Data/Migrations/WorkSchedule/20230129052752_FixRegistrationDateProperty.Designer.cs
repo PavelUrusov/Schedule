@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WorkSchedule.DataAccessLayer.Database;
@@ -11,9 +12,10 @@ using WorkSchedule.DataAccessLayer.Database;
 namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
 {
     [DbContext(typeof(WorkScheduleDbContext))]
-    partial class WorkScheduleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230129052752_FixRegistrationDateProperty")]
+    partial class FixRegistrationDateProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,36 +69,6 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
                     b.HasIndex("WorkObjectId");
 
                     b.ToTable("Employees", (string)null);
-                });
-
-            modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<long>("ExpireAtUnixTimeSecUtc")
-                        .HasMaxLength(255)
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsValid")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.Role", b =>
@@ -274,17 +246,6 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
                     b.Navigation("WorkObject");
                 });
 
-            modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("WorkSchedule.DataAccessLayer.Entities.User", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.Schedule", b =>
                 {
                     b.HasOne("WorkSchedule.DataAccessLayer.Entities.Employee", "Employee")
@@ -333,8 +294,6 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
 
             modelBuilder.Entity("WorkSchedule.DataAccessLayer.Entities.User", b =>
                 {
-                    b.Navigation("RefreshTokens");
-
                     b.Navigation("WorkObjects");
 
                     b.Navigation("WorkSchemas");

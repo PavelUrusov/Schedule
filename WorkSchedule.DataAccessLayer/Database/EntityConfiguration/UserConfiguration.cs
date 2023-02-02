@@ -10,12 +10,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
         builder.HasKey(u => u.Id);
-        builder.HasIndex(u => u.Email).IsUnique();
-        builder.HasIndex(u => u.Username).IsUnique();
+        builder.HasIndex(u => u.NormalizedEmail).IsUnique();
+        builder.Property(u => u.NormalizedEmail).IsRequired().HasMaxLength(255);
         builder.Property(u => u.Email).IsRequired().HasMaxLength(255);
         builder.Property(u => u.Username).IsRequired().HasMaxLength(255);
-        builder.Property(u => u.Password).IsRequired(false).HasMaxLength(64);
-        builder.Property(u => u.RegistrationDate).IsRequired();
+        builder.Property(u => u.Password).IsRequired(false).HasMaxLength(255);
+        builder.Property(u => u.RegistrationUnixTimeSecondsUtc).IsRequired();
+        builder.HasMany(u => u.RefreshTokens).WithOne(rt => rt.User).HasForeignKey(rt => rt.UserId);
+        builder.HasMany(u => u.Roles).WithMany(r => r.Users).UsingEntity("UserRoles");
         builder.HasMany(u => u.WorkSchemas).WithOne(ws => ws.User).HasForeignKey(ws => ws.UserId);
         builder.HasMany(u => u.WorkObjects).WithOne(wo => wo.User).HasForeignKey(wo => wo.UserId);
     }
