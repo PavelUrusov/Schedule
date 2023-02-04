@@ -3,7 +3,7 @@ using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Token;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.User;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.Identity.IdentityService;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
 
 public interface IIdentityService
 {

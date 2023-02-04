@@ -9,7 +9,7 @@ using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.Identity.TokenService;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.TokenService;
 
 public class TokenService : ITokenService
 {

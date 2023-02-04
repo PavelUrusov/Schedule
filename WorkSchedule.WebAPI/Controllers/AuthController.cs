@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Role;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Token;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.User;
-using WorkSchedule.BusinessLogicLayer.Services.Identity.IdentityService;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
 
 namespace WorkSchedule.WebAPI.Controllers;
 
