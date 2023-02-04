@@ -6,4 +6,5 @@ public class WorkObject : BaseEntity<int>
     public virtual User User { get; set; } = null!;
     public int UserId { get; set; } = default!;
     public virtual IEnumerable<Employee> Employees { get; set; } = null!;
+    public virtual IEnumerable<WorkMonth> WorkMonths { get; set; } = null!;
 }

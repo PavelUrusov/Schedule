@@ -1,14 +1,14 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Role;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Token;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.User;
+﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Role;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Token;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.User;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.Identity.IdentityService;
 
 public interface IIdentityService
 {
-    Task<ResponseBase> AddRoleAsync(AddRoleRequest roleRequest);
-    Task<ResponseBase> RegistrationAsync(RegisterUserRequest registerRequest);
-    Task<ResponseBase> LoginAsync(LoginUserRequest loginUserRequest);
-    Task<ResponseBase> RefreshToken(TokenRequest token);
+    Task<ResponseBase> AddRoleAsync(AddRoleDto roleDto);
+    Task<ResponseBase> RegistrationAsync(RegisterUserDto registerDto);
+    Task<ResponseBase> LoginAsync(LoginUserDto loginUserDto);
+    Task<ResponseBase> RefreshToken(TokenRequestDto token);
 }

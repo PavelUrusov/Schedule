@@ -56,4 +56,10 @@ public class WorkScheduleWorkScheduleRepository<T, TKey> :
         _dbSet.RemoveRange(entities);
         await _context.SaveChangesAsync();
     }
+
+    public async Task InsertRangeAsync(IEnumerable<T> entities)
+    {
+        await _dbSet.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
+    }
 }

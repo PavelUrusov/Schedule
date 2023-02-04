@@ -13,4 +13,5 @@ public interface IWorkScheduleRepository<T, TKey>
     Task DeleteAsync(T entity);
     IQueryable<T> CreateQueryable();
     Task DeleteRangeAsync(IEnumerable<T> entities);
+    Task InsertRangeAsync(IEnumerable<T> entities);
 }

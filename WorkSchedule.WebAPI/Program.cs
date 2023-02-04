@@ -18,6 +18,7 @@ builder.Services.AddRepositories();
 builder.Services.AddIdentityService();
 builder.Services.AddBearerAuthenticationExtension(tokenValidationPrincipal);
 builder.Services.AddAuthorizationWithPolicy();
+builder.Services.AddAutomapper();
 
 //Adding Options 
 builder.Services.AddConfigureSettings(builder.Configuration);

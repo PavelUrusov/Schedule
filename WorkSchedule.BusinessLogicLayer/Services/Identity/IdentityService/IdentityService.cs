@@ -1,8 +1,8 @@
 ﻿using System.Net;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Role;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Token;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.User;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Role;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Token;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.User;
 using WorkSchedule.BusinessLogicLayer.Services.Identity.PasswordManager;
 using WorkSchedule.BusinessLogicLayer.Services.Identity.RoleManager;
 using WorkSchedule.BusinessLogicLayer.Services.Identity.TokenService;
@@ -29,9 +29,9 @@ public class IdentityService : IIdentityService
         _passwordManager = passwordManager;
     }
 
-    public virtual async Task<ResponseBase> LoginAsync(LoginUserRequest loginUserRequest)
+    public virtual async Task<ResponseBase> LoginAsync(LoginUserDto loginUserDto)
     {
-        var verifyCredentials = await VerifyUserCredentialsAsync(loginUserRequest);
+        var verifyCredentials = await VerifyUserCredentialsAsync(loginUserDto);
         if (verifyCredentials.IsUnsuccessful)
             return new ResponseBase(verifyCredentials.ErrorMessage, HttpStatusCode.BadRequest);
 
@@ -43,9 +43,9 @@ public class IdentityService : IIdentityService
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    public virtual async Task<ResponseBase> AddRoleAsync(AddRoleRequest roleRequest)
+    public virtual async Task<ResponseBase> AddRoleAsync(AddRoleDto roleDto)
     {
-        var role = new Role { Name = roleRequest.Name };
+        var role = new Role { Name = roleDto.Name };
         var result = await _roleManager.CreateRoleAsync(role);
 
         return result.IsSuccessful
@@ -53,7 +53,7 @@ public class IdentityService : IIdentityService
             : new ResponseBase(result.ErrorMessage, HttpStatusCode.BadRequest);
     }
 
-    public virtual async Task<ResponseBase> RegistrationAsync(RegisterUserRequest registerRequest)
+    public virtual async Task<ResponseBase> RegistrationAsync(RegisterUserDto registerDto)
     {
         var existingRole = await _roleManager.FindByNameAsync(Roles.User);
         if (existingRole.IsUnsuccessful)
@@ -62,18 +62,18 @@ public class IdentityService : IIdentityService
         var user = new User
         {
             Roles = new List<Role> { existingRole.Data! },
-            Username = registerRequest.Username,
-            Email = registerRequest.Email,
+            Username = registerDto.Username,
+            Email = registerDto.Email,
             RegistrationUnixTimeSecondsUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
         };
-        var result = await _userManager.CreateNewUserAsync(user, registerRequest.Password);
+        var result = await _userManager.CreateNewUserAsync(user, registerDto.Password);
 
         return result.IsSuccessful
             ? new ResponseBase()
             : new ResponseBase(result.ErrorMessage, HttpStatusCode.BadRequest);
     }
 
-    public virtual async Task<ResponseBase> RefreshToken(TokenRequest token)
+    public virtual async Task<ResponseBase> RefreshToken(TokenRequestDto token)
     {
         var result = _tokenService.GetAccessTokenPrincipalFromExpiredToken(token.AccessToken);
         if (result.IsUnsuccessful)
@@ -98,13 +98,13 @@ public class IdentityService : IIdentityService
         return new TokenResponse(accessToken, newRefreshToken);
     }
 
-    private async Task<Result<User?>> VerifyUserCredentialsAsync(LoginUserRequest request)
+    private async Task<Result<User?>> VerifyUserCredentialsAsync(LoginUserDto dto)
     {
-        var findEmail = await _userManager.FindUserByEmailAsync(request.Email);
+        var findEmail = await _userManager.FindUserByEmailAsync(dto.Email);
         if (findEmail.IsUnsuccessful)
             return new Result<User?>("Incorrect password or email");
 
-        var verifyPassword = _passwordManager.VerifyPassword(request.Password, findEmail.Data!.Password);
+        var verifyPassword = _passwordManager.VerifyPassword(dto.Password, findEmail.Data!.Password);
 
         return verifyPassword.IsSuccessful
             ? new Result<User?>(findEmail.Data)

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.26.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
@@ -14,6 +15,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WorkSchedule.DataAccessLayer\WorkSchedule.DataAccessLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataTransferObjects\Requests\Employee\" />
+    <Folder Include="DataTransferObjects\Requests\Schedule\" />
+    <Folder Include="DataTransferObjects\Requests\WorkObject\" />
   </ItemGroup>
 
 </Project>
