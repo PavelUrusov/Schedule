@@ -9,6 +9,8 @@ public class WorkObjectConfiguration : IEntityTypeConfiguration<WorkObject>
     public void Configure(EntityTypeBuilder<WorkObject> builder)
     {
         builder.ToTable("WorkObjects");
+        builder.HasKey(wo => wo.Id);
+        builder.HasAlternateKey(wo => new { wo.Name, wo.Id });
         builder.HasIndex(wo => wo.Id);
         builder.Property(wo => wo.Name).IsRequired().HasMaxLength(255);
         builder.HasOne(wo => wo.User).WithMany(u => u.WorkObjects).HasForeignKey(wo => wo.UserId);

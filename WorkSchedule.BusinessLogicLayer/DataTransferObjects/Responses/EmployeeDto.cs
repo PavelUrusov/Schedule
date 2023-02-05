@@ -4,7 +4,7 @@ using WorkSchedule.DataAccessLayer.Entities;
 
 namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 
-public record EmployeeDto : ResponseBase,IMapWith<Employee>
+public record EmployeeDto
 {
     public int Id { get; set; }
     public IEnumerable<ScheduleDto> Schedules { get; set; } = null!;

@@ -20,8 +20,6 @@
   <ItemGroup>
     <Folder Include="DataTransferObjects\Requests\Employee\" />
     <Folder Include="DataTransferObjects\Requests\Schedule\" />
-    <Folder Include="DataTransferObjects\Requests\WorkObject\" />
-    <Folder Include="Services\ScheduleServices\" />
   </ItemGroup>
 
 </Project>

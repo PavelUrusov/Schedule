@@ -1,4 +1,5 @@
-﻿using WorkSchedule.DataAccessLayer.Entities;
+﻿using System.Linq.Expressions;
+using WorkSchedule.DataAccessLayer.Entities;
 
 namespace WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
@@ -14,4 +15,7 @@ public interface IWorkScheduleRepository<T, TKey>
     IQueryable<T> CreateQueryable();
     Task DeleteRangeAsync(IEnumerable<T> entities);
     Task InsertRangeAsync(IEnumerable<T> entities);
+    Task<T?> FirstOrDefaultAsync(Expression<Func<T?, bool>> predicate);
+    Task<T> FirstAsync(Expression<Func<T, bool>> predicate);
+
 }

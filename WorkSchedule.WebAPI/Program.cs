@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGenWithAuth();
 builder.Services.AddDatabaseContext(connectionString);
 builder.Services.AddRepositories();
+builder.Services.AddScheduleServices();
 builder.Services.AddIdentityService();
 builder.Services.AddBearerAuthenticationExtension(tokenValidationPrincipal);
 builder.Services.AddAuthorizationWithPolicy();

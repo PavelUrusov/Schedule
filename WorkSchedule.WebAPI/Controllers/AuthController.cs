@@ -27,7 +27,7 @@ public class AuthController : ControllerBase
     {
         var response = await _identityService.RegistrationAsync(dto);
 
-        return StatusCode((int)response.StatusCode, response);
+        return StatusCode(response.StatusCode, response);
     }
 
     [Authorize(Policy = "Admin")]
@@ -37,7 +37,7 @@ public class AuthController : ControllerBase
     {
         var response = await _identityService.AddRoleAsync(dto);
 
-        return StatusCode((int)response.StatusCode, response);
+        return StatusCode(response.StatusCode, response);
     }
 
     [AllowAnonymous]
@@ -47,7 +47,7 @@ public class AuthController : ControllerBase
     {
         var response = await _identityService.LoginAsync(loginUserDto);
 
-        return StatusCode((int)response.StatusCode, response);
+        return StatusCode(response.StatusCode, response);
     }
 
     [Route("[action]")]
@@ -56,6 +56,6 @@ public class AuthController : ControllerBase
     {
         var response = await _identityService.RefreshToken(token);
 
-        return StatusCode((int)response.StatusCode, response);
+        return StatusCode(response.StatusCode, response);
     }
 }
