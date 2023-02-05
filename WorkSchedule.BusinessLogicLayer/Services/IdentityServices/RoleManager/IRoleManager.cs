@@ -1,7 +1,7 @@
 ﻿using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.Identity.RoleManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;
 
 public interface IRoleManager
 {

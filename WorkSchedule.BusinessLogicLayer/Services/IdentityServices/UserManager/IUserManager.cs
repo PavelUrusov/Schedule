@@ -2,7 +2,7 @@
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.Identity.UserManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.UserManager;
 
 public interface IUserManager
 {

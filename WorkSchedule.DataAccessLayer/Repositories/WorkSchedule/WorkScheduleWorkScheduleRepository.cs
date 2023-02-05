@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using WorkSchedule.DataAccessLayer.Database;
 using WorkSchedule.DataAccessLayer.Entities;
 
@@ -61,5 +62,14 @@ public class WorkScheduleWorkScheduleRepository<T, TKey> :
     {
         await _dbSet.AddRangeAsync(entities);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<T?> FirstOrDefaultAsync(Expression<Func<T?, bool>> predicate)
+    {
+        return await _dbSet.FirstOrDefaultAsync(predicate);
+    }
+    public async Task<T> FirstAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.FirstAsync(predicate);
     }
 }

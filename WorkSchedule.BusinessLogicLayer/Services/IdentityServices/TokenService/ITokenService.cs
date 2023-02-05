@@ -2,7 +2,7 @@
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.Identity.TokenService;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.TokenService;
 
 public interface ITokenService
 {

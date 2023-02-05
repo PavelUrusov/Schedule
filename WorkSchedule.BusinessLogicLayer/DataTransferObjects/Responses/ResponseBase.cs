@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text.Json.Serialization;
 
 namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 
@@ -8,17 +9,14 @@ public record ResponseBase
     {
     }
 
-    public ResponseBase(string? errorMessage, HttpStatusCode statusCode)
+    public ResponseBase(string? errorMessage, HttpStatusCode httpStatusCode)
     {
         ErrorMessage = errorMessage;
-        StatusCode = statusCode;
+        HttpStatusCode = httpStatusCode;
     }
 
-    public HttpStatusCode StatusCode { get; init; } = HttpStatusCode.OK;
+    public HttpStatusCode HttpStatusCode { get; init; } = HttpStatusCode.OK;
+    [JsonIgnore]
+    public int StatusCode => (int)HttpStatusCode;
     public string? ErrorMessage { get; init; }
-}
-
-public record ResponseBase<T> : ResponseBase
-{
-    public T? Data { get; init; }
 }

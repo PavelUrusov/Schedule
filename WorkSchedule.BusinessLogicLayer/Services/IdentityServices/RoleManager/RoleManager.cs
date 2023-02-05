@@ -3,7 +3,7 @@ using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.Identity.RoleManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;
 
 public class RoleManager : IRoleManager
 {

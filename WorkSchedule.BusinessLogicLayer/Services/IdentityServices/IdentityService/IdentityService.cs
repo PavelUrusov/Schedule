@@ -3,14 +3,14 @@ using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Role;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Token;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.User;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
-using WorkSchedule.BusinessLogicLayer.Services.Identity.PasswordManager;
-using WorkSchedule.BusinessLogicLayer.Services.Identity.RoleManager;
-using WorkSchedule.BusinessLogicLayer.Services.Identity.TokenService;
-using WorkSchedule.BusinessLogicLayer.Services.Identity.UserManager;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordManager;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.TokenService;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.UserManager;
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.Identity.IdentityService;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
 
 public class IdentityService : IIdentityService
 {
