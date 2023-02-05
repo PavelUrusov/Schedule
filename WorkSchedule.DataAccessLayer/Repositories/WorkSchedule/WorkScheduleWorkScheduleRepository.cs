@@ -30,11 +30,15 @@ public class WorkScheduleWorkScheduleRepository<T, TKey> :
         return await _dbSet.FindAsync(id);
     }
 
-    public IEnumerable<T> GetAsync()
+    public IEnumerable<T> AsEnumerable()
     {
         return _dbSet.AsEnumerable();
     }
 
+    public async Task<List<T>> ToListAsync()
+    {
+        return await _dbSet.ToListAsync();
+    }
     public IQueryable<T> CreateQueryable()
     {
         return _dbSet.AsQueryable();

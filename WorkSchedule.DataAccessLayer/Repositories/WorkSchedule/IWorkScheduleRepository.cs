@@ -9,7 +9,8 @@ public interface IWorkScheduleRepository<T, TKey>
 {
     Task InsertAsync(T entity);
     Task<T?> GetByIdAsync(object id);
-    IEnumerable<T> GetAsync();
+    IEnumerable<T> AsEnumerable();
+    Task<List<T>> ToListAsync();
     Task UpdateAsync(T entity);
     Task DeleteAsync(T entity);
     IQueryable<T> CreateQueryable();
@@ -17,5 +18,4 @@ public interface IWorkScheduleRepository<T, TKey>
     Task InsertRangeAsync(IEnumerable<T> entities);
     Task<T?> FirstOrDefaultAsync(Expression<Func<T?, bool>> predicate);
     Task<T> FirstAsync(Expression<Func<T, bool>> predicate);
-
 }
