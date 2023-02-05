@@ -16,7 +16,12 @@ public record ResponseBase
     }
 
     public HttpStatusCode HttpStatusCode { get; init; } = HttpStatusCode.OK;
-    [JsonIgnore]
-    public int StatusCode => (int)HttpStatusCode;
+
+    [JsonIgnore] public int StatusCode => (int)HttpStatusCode;
+
+    [JsonIgnore] public bool IsSuccessful => StatusCode > 199 && StatusCode < 400;
+
+    [JsonIgnore] public bool IsUnsuccessful => !IsSuccessful;
+
     public string? ErrorMessage { get; init; }
 }
