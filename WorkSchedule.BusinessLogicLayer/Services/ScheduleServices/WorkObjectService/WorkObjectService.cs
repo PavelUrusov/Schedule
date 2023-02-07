@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObject;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.WorkObject;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.WorkObjectDtos;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
@@ -27,7 +27,8 @@ public class WorkObjectService : IWorkObjectService
         if (result is not null)
             return new ResponseBase("The Work Object with that name already exist", HttpStatusCode.BadRequest);
 
-        var workObject = new WorkObject { Name = dto.Name, UserId = userId };
+        var workYear = await GenerateWorkYearAsync(DateTime.Now.Year);
+        var workObject = new WorkObject { Name = dto.Name, UserId = userId, WorkMonths = workYear };
         await _woRepository.InsertAsync(workObject);
 
         return new ResponseBase();
@@ -37,7 +38,7 @@ public class WorkObjectService : IWorkObjectService
     {
         var dtos = await _woRepository.CreateQueryable()
             .Where(wo => wo.UserId == userId)
-            .Select(wo => new WorkObjectDto { Id = wo.Id, Name = wo.Name })
+            .Select(wo=> _mapper.Map<WorkObject,GetWorkObjectDto>(wo))
             .ToListAsync();
 
         return new WorkObjectsDtos { Dtos = dtos };
@@ -47,10 +48,10 @@ public class WorkObjectService : IWorkObjectService
     {
         var workObject =
             await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.UserId == userId && wo.Id == dto.Id);
-
+        
         return workObject is null
             ? new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest)
-            : new WorkObjectDto { Id = workObject.Id, Name = workObject.Name };
+            : _mapper.Map<WorkObject,GetWorkObjectDto>(workObject);
     }
 
     public async Task<ResponseBase> RemoveWorkObjectAsync(WorkObjectIdDto dto, int userId)
@@ -63,5 +64,23 @@ public class WorkObjectService : IWorkObjectService
         await _woRepository.DeleteAsync(workObject);
 
         return new ResponseBase();
+    }
+
+    private async Task<IEnumerable<WorkMonth>> GenerateWorkYearAsync(int year)
+    {
+        var task = new Task<List<WorkMonth>>(() =>
+        {
+            var list = new List<WorkMonth>(13);
+            for (var i = 1; i < 13; ++i)
+                list.Add(new WorkMonth
+                {
+                    Date = new DateOnly(year, i, 1)
+                });
+
+            return list;
+        });
+        task.Start();
+
+        return await task;
     }
 }

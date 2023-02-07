@@ -10,9 +10,8 @@ public class WorkMonthConfiguration : IEntityTypeConfiguration<WorkMonth>
     {
         builder.ToTable("WorkMonths");
         builder.HasKey(wm => wm.Id);
-        builder.HasAlternateKey(wm => new { wm.Month, wm.Year, wm.WorkObjectId });
-        builder.Property(wm => wm.Year).IsRequired();
-        builder.Property(wm => wm.Month).IsRequired();
+        builder.HasAlternateKey(wm => new { wm.WorkObjectId, wm.Date});
+        builder.Property(wm => wm.Date).IsRequired();
         builder.HasMany(wm => wm.Schedules).WithOne(s => s.WorkMonth).HasForeignKey(s => s.WorkMonthId);
         builder.HasOne(wm => wm.WorkObject).WithMany(wo => wo.WorkMonths).HasForeignKey(wm => wm.WorkObjectId);
     }
