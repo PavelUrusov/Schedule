@@ -3,6 +3,7 @@ using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.RoleDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.TokenDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.UserDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.TokenDtos;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordManager;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.TokenService;
@@ -40,7 +41,7 @@ public class IdentityService : IIdentityService
         var accessToken = _tokenService.CreateAccessToken(userClaims);
         var refreshToken = await _tokenService.CreateRefreshTokenForUserAsync(user);
 
-        return new TokenResponse(accessToken, refreshToken);
+        return new TokenResponse{AccessToken = accessToken, RefreshToken = refreshToken};
     }
 
     public virtual async Task<ResponseBase> AddRoleAsync(AddRoleDto roleDto)
@@ -95,7 +96,7 @@ public class IdentityService : IIdentityService
         var newRefreshToken = await _tokenService.OverwriteRefreshTokenAsync(userRefreshToken);
         var accessToken = _tokenService.CreateAccessToken(_userManager.GetUserClaims(user));
 
-        return new TokenResponse(accessToken, newRefreshToken);
+        return new TokenResponse{AccessToken = accessToken, RefreshToken = newRefreshToken};
     }
 
     private async Task<Result<User?>> VerifyUserCredentialsAsync(LoginUserDto dto)

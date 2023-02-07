@@ -7,8 +7,8 @@ namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectSe
 public interface IWorkObjectService
 {
     Task<ResponseBase> AddWorkObject(AddWorkObjectDto dto,int userId);
-    Task<ResponseBase> RemoveWorkObjectAsync(GetWorkObjectDto dto,int userId);
-    Task<ResponseBase> GetWorkObjectAsync(GetWorkObjectDto dto, int userId);
+    Task<ResponseBase> RemoveWorkObjectAsync(WorkObjectIdDto idDto,int userId);
+    Task<ResponseBase> GetWorkObjectAsync(WorkObjectIdDto idDto, int userId);
     Task<ResponseBase> GetAllWorkObjectsAsync(int userId);
     Task<ResponseBase> AddWorkMonth(AddWorkMonthDto dto, int userId);
 }

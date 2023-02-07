@@ -39,18 +39,18 @@ public class WorkObjectController : ControllerBase
 
     [Route("[action]")]
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] GetWorkObjectDto dto)
+    public async Task<IActionResult> Get([FromQuery] WorkObjectIdDto idDto)
     {
-        var response = await _woService.GetWorkObjectAsync(dto, this.UserId()!.Value);
+        var response = await _woService.GetWorkObjectAsync(idDto, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }
 
     [Route("[action]")]
     [HttpDelete]
-    public async Task<IActionResult> Remove([FromQuery] GetWorkObjectDto dto)
+    public async Task<IActionResult> Remove([FromQuery] WorkObjectIdDto idDto)
     {
-        var response = await _woService.RemoveWorkObjectAsync(dto, this.UserId()!.Value);
+        var response = await _woService.RemoveWorkObjectAsync(idDto, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }

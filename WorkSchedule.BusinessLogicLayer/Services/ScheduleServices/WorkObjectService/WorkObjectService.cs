@@ -7,7 +7,6 @@ using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.WorkObjectDtos;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
-using GetWorkObjectDto = WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos.GetWorkObjectDto;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
 
@@ -50,20 +49,20 @@ public class WorkObjectService : IWorkObjectService
         return new WorkObjectsDtos { Dtos = dtos };
     }
 
-    public async Task<ResponseBase> GetWorkObjectAsync(GetWorkObjectDto dto, int userId)
+    public async Task<ResponseBase> GetWorkObjectAsync(WorkObjectIdDto idDto, int userId)
     {
         var workObject =
-            await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.UserId == userId && wo.Id == dto.Id);
+            await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.UserId == userId && wo.Id == idDto.Id);
 
         return workObject is null
             ? new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest)
             : _mapper.Map<WorkObject, DataTransferObjects.Responses.WorkObjectDtos.GetWorkObjectDto>(workObject);
     }
 
-    public async Task<ResponseBase> RemoveWorkObjectAsync(GetWorkObjectDto dto, int userId)
+    public async Task<ResponseBase> RemoveWorkObjectAsync(WorkObjectIdDto idDto, int userId)
     {
         var workObject =
-            await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.Id == dto.Id && wo.UserId == userId);
+            await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.Id == idDto.Id && wo.UserId == userId);
         if (workObject is null)
             return new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest);
 
