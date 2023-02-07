@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchema;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchemaDtos;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkSchemaService;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 

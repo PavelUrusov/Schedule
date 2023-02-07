@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Token;
+namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.TokenDtos;
 
-public record TokenRequest
+public record TokenRequestDto
 {
     [Required(ErrorMessage = "The AccessToken property is required")]
     public string AccessToken { get; init; } = null!;

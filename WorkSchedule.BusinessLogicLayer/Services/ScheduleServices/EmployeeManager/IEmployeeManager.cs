@@ -1,4 +1,4 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Employee;
+﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.EmployeeDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.EmployeeManager;

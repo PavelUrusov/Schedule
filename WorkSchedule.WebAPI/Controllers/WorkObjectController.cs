@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObject;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkMonthDto;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
@@ -38,7 +39,7 @@ public class WorkObjectController : ControllerBase
 
     [Route("[action]")]
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] WorkObjectIdDto dto)
+    public async Task<IActionResult> Get([FromQuery] GetWorkObjectDto dto)
     {
         var response = await _woService.GetWorkObjectAsync(dto, this.UserId()!.Value);
 
@@ -47,9 +48,18 @@ public class WorkObjectController : ControllerBase
 
     [Route("[action]")]
     [HttpDelete]
-    public async Task<IActionResult> Remove([FromQuery] WorkObjectIdDto dto)
+    public async Task<IActionResult> Remove([FromQuery] GetWorkObjectDto dto)
     {
         var response = await _woService.RemoveWorkObjectAsync(dto, this.UserId()!.Value);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [Route("[action]")]
+    [HttpPost]
+    public async Task<IActionResult> AddWorkMonth([FromBody] AddWorkMonthDto dto)
+    {
+        var response = await _woService.AddWorkMonth(dto, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }

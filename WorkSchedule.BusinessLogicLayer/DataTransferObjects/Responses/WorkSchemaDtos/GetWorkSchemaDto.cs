@@ -5,7 +5,7 @@ using WorkSchedule.DataAccessLayer.Entities.Enums;
 
 namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.WorkSchemaDtos;
 
-public class GetWorkSchemaDto : IMapWith<WorkSchema>
+public record GetWorkSchemaDto : ResponseBase, IMapWith<WorkSchema>
 {
     public int Id { get; set; }
     public string Name { get; init; } = null!;

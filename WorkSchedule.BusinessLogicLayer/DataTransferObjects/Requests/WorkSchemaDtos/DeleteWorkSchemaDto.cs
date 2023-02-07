@@ -1,4 +1,4 @@
-﻿namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchema
+﻿namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchemaDtos
 {
     public class DeleteWorkSchemaDto
     {

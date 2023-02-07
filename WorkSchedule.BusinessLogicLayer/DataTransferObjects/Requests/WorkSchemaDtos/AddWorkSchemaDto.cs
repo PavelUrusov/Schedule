@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WorkSchedule.DataAccessLayer.Entities.Enums;
 
-namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchema;
+namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchemaDtos;
 
 public class AddWorkSchemaDto
 {

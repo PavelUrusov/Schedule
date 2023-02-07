@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Role;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Token;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.User;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.RoleDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.TokenDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.UserDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordManager;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObject;
+namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos;
 
 public record AddWorkObjectDto
 {

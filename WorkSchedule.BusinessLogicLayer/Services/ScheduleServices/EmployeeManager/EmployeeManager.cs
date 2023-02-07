@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.Employee;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObject;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.EmployeeDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
 using WorkSchedule.DataAccessLayer.Entities;
@@ -24,7 +24,7 @@ public class EmployeeManager : IEmployeeManager
 
     public async Task<ResponseBase> AddEmployeeAsync(AddEmployeeDto dto, int userId)
     {
-        var result = await _woService.GetWorkObjectAsync(new WorkObjectIdDto { Id = dto.WorkObjectId }, userId);
+        var result = await _woService.GetWorkObjectAsync(new GetWorkObjectDto { Id = dto.WorkObjectId }, userId);
         if (result.IsUnsuccessful)
             return result;
 
@@ -42,7 +42,7 @@ public class EmployeeManager : IEmployeeManager
 
     public async Task<ResponseBase> AddEmployeeListAsync(AddListEmployeeDto dto, int userId)
     {
-        var result = await _woService.GetWorkObjectAsync(new WorkObjectIdDto { Id = dto.WorkObjectId }, userId);
+        var result = await _woService.GetWorkObjectAsync(new GetWorkObjectDto { Id = dto.WorkObjectId }, userId);
         if (result.IsUnsuccessful)
             return result;
 

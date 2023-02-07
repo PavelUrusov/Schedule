@@ -20,12 +20,8 @@ public record GetWorkObjectDto : ResponseBase, IMapWith<WorkObject>
             .ForMember(dto => dto.WorkMonths,
                 opt => opt.MapFrom(x => x.WorkMonths.Select(wm => new GetWorkMonthDto
                 {
-                    Id = wm.Id, Date = wm.Date.ToString("yyyy.MM")
+                    Id = wm.Id, Date = wm.Date.ToString("MM.yyyy")
                 })));
     }
 }
 
-public record WorkObjectsDtos : ResponseBase
-{
-    public IEnumerable<GetWorkObjectDto> Dtos { get; init; } = null!;
-}

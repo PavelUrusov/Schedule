@@ -31,7 +31,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
 app.AddCustomCors();
-app.UseErrorHandling();
+//app.UseErrorHandling();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

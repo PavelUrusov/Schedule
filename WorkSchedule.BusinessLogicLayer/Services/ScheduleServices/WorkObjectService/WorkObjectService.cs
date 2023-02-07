@@ -1,23 +1,28 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObject;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkMonthDto;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.WorkObjectDtos;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
+using GetWorkObjectDto = WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos.GetWorkObjectDto;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
 
 public class WorkObjectService : IWorkObjectService
 {
     private readonly IMapper _mapper;
+    private readonly IWorkScheduleRepository<WorkMonth, int> _wmRepository;
     private readonly IWorkScheduleRepository<WorkObject, int> _woRepository;
 
-    public WorkObjectService(IWorkScheduleRepository<WorkObject, int> woRepository, IMapper mapper)
+    public WorkObjectService(IWorkScheduleRepository<WorkObject, int> woRepository, IMapper mapper,
+        IWorkScheduleRepository<WorkMonth, int> wmRepository)
     {
         _woRepository = woRepository;
         _mapper = mapper;
+        _wmRepository = wmRepository;
     }
 
     public async Task<ResponseBase> AddWorkObject(AddWorkObjectDto dto, int userId)
@@ -37,24 +42,25 @@ public class WorkObjectService : IWorkObjectService
     public async Task<ResponseBase> GetAllWorkObjectsAsync(int userId)
     {
         var dtos = await _woRepository.CreateQueryable()
+            .Include(wo => wo.WorkMonths)
             .Where(wo => wo.UserId == userId)
-            .Select(wo=> _mapper.Map<WorkObject,GetWorkObjectDto>(wo))
+            .Select(wo => _mapper.Map<WorkObject, DataTransferObjects.Responses.WorkObjectDtos.GetWorkObjectDto>(wo))
             .ToListAsync();
 
         return new WorkObjectsDtos { Dtos = dtos };
     }
 
-    public async Task<ResponseBase> GetWorkObjectAsync(WorkObjectIdDto dto, int userId)
+    public async Task<ResponseBase> GetWorkObjectAsync(GetWorkObjectDto dto, int userId)
     {
         var workObject =
             await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.UserId == userId && wo.Id == dto.Id);
-        
+
         return workObject is null
             ? new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest)
-            : _mapper.Map<WorkObject,GetWorkObjectDto>(workObject);
+            : _mapper.Map<WorkObject, DataTransferObjects.Responses.WorkObjectDtos.GetWorkObjectDto>(workObject);
     }
 
-    public async Task<ResponseBase> RemoveWorkObjectAsync(WorkObjectIdDto dto, int userId)
+    public async Task<ResponseBase> RemoveWorkObjectAsync(GetWorkObjectDto dto, int userId)
     {
         var workObject =
             await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.Id == dto.Id && wo.UserId == userId);
@@ -62,6 +68,24 @@ public class WorkObjectService : IWorkObjectService
             return new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest);
 
         await _woRepository.DeleteAsync(workObject);
+
+        return new ResponseBase();
+    }
+
+    public async Task<ResponseBase> AddWorkMonth(AddWorkMonthDto dto, int userId)
+    {
+        var date = DateOnly.Parse(dto.Date);
+        var wo = await _woRepository.FirstOrDefaultAsync(wo =>
+            wo != null && wo.UserId == userId && wo.Id == dto.WorkObjectId);
+        if (wo is null)
+            return new ResponseBase("The Work Object not found", HttpStatusCode.BadRequest);
+
+        var workMonth = new WorkMonth
+        {
+            Date = date,
+            WorkObjectId = dto.WorkObjectId
+        };
+        await _wmRepository.InsertAsync(workMonth);
 
         return new ResponseBase();
     }

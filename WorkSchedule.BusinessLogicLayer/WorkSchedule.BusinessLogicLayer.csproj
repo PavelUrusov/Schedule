@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataTransferObjects\Requests\Schedule\" />
+    <Folder Include="DataTransferObjects\Requests\ScheduleDtos\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchema;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchemaDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.WorkSchemaDtos;
 using WorkSchedule.DataAccessLayer.Entities;
