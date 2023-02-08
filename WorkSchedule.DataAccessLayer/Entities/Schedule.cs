@@ -2,7 +2,7 @@
 
 public class Schedule : BaseEntity<int>
 {
-    public DateOnly ScheduleStart { get; set; }
+    public string ScheduleStart { get; set; } = null!;
     public virtual WorkSchema WorkSchema { get; set; } = null!;
     public int WorkSchemaId { get; set; } = default!;
     public virtual Employee Employee { get; set; } = null!;

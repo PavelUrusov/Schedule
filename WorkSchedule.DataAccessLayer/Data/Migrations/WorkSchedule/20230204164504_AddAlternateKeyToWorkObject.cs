@@ -1,24 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
+namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule;
+
+public partial class AddAlternateKeyToWorkObject : Migration
 {
-    public partial class AddAlternateKeyToWorkObject : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddUniqueConstraint(
-                name: "AK_WorkObjects_Name_Id",
-                table: "WorkObjects",
-                columns: new[] { "Name", "Id" });
-        }
+        migrationBuilder.AddUniqueConstraint(
+            "AK_WorkObjects_Name_Id",
+            "WorkObjects",
+            new[] { "Name", "Id" });
+    }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropUniqueConstraint(
-                name: "AK_WorkObjects_Name_Id",
-                table: "WorkObjects");
-        }
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropUniqueConstraint(
+            "AK_WorkObjects_Name_Id",
+            "WorkObjects");
     }
 }

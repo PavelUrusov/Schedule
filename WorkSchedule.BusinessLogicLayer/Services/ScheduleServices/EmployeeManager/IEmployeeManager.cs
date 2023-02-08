@@ -1,15 +1,12 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.EmployeeDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
+﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.EmployeeManager;
 
 public interface IEmployeeManager
 {
-    Task<ResponseBase> AddEmployeeAsync(AddEmployeeDto dto, int userId);
-    Task<ResponseBase> AddEmployeeListAsync(AddListEmployeeDto dto, int userId);
-    Task<ResponseBase> RemoveEmployeeAsync(RemoveEmployeeDto dto, int userId);
-    Task<ResponseBase> RemoveListEmployeeAsync(RemoveListEmployeeDto dto, int userId);
-    Task<ResponseBase> GetListEmployeeWithSchedulesAsync(GetEmployeeWithSchedulesDto dto, int userId);
-
+    Task<ResponseBase> AddEmployeeAsync(RequestAddEmployeeDto dto, int userId);
+    Task<ResponseBase> AddEmployeeListAsync(RequestAddListEmployeeDto dto, int userId);
+    Task<ResponseBase> RemoveEmployeeAsync(RequestRemoveEmployeeDto dto, int userId);
+    Task<ResponseBase> RemoveListEmployeeAsync(RequestRemoveListEmployeeDto dto, int userId);
 }

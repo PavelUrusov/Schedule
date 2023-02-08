@@ -12,5 +12,4 @@ public class HelloWorldController : ControllerBase
     {
         return StatusCode(200, "Hello World!");
     }
-
 }

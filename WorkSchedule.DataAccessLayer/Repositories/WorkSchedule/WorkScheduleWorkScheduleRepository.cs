@@ -39,6 +39,7 @@ public class WorkScheduleWorkScheduleRepository<T, TKey> :
     {
         return await _dbSet.ToListAsync();
     }
+
     public IQueryable<T> CreateQueryable()
     {
         return _dbSet.AsQueryable();
@@ -72,6 +73,7 @@ public class WorkScheduleWorkScheduleRepository<T, TKey> :
     {
         return await _dbSet.FirstOrDefaultAsync(predicate);
     }
+
     public async Task<T> FirstAsync(Expression<Func<T, bool>> predicate)
     {
         return await _dbSet.FirstAsync(predicate);

@@ -69,7 +69,7 @@ public class UserManager : IUserManager
     public virtual async Task<Result> DeleteAsync(User user)
     {
         var result = await _userRepository.GetByIdAsync(user.Id);
-        if (result is null) 
+        if (result is null)
             return new Result("User not found");
 
         await _userRepository.DeleteAsync(user);

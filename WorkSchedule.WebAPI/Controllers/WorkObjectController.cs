@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkMonthDto;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
@@ -21,7 +21,7 @@ public class WorkObjectController : ControllerBase
 
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] AddWorkObjectDto request)
+    public async Task<IActionResult> Add([FromBody] RequestAddWorkObjectDto request)
     {
         var response = await _woService.AddWorkObject(request, this.UserId()!.Value);
 
@@ -32,32 +32,32 @@ public class WorkObjectController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var response = await _woService.GetAllWorkObjectsAsync(this.UserId()!.Value);
+        var response = await _woService.GetListWorkObjectAsync(this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }
 
     [Route("[action]")]
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] WorkObjectIdDto idDto)
+    public async Task<IActionResult> Get([FromQuery] RequestGetWorkObjectDto dto)
     {
-        var response = await _woService.GetWorkObjectAsync(idDto, this.UserId()!.Value);
+        var response = await _woService.GetWorkObjectAsync(dto, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }
 
     [Route("[action]")]
     [HttpDelete]
-    public async Task<IActionResult> Remove([FromQuery] WorkObjectIdDto idDto)
+    public async Task<IActionResult> Remove([FromQuery] RequestRemoveWorkObjectDto dto)
     {
-        var response = await _woService.RemoveWorkObjectAsync(idDto, this.UserId()!.Value);
+        var response = await _woService.RemoveWorkObjectAsync(dto, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }
 
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> AddWorkMonth([FromBody] AddWorkMonthDto dto)
+    public async Task<IActionResult> AddWorkMonth([FromBody] RequestAddWorkMonthDto dto)
     {
         var response = await _woService.AddWorkMonth(dto, this.UserId()!.Value);
 

@@ -1,14 +1,14 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkMonthDto;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkObjectDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
+﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkObjectDto;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
 
 public interface IWorkObjectService
 {
-    Task<ResponseBase> AddWorkObject(AddWorkObjectDto dto,int userId);
-    Task<ResponseBase> RemoveWorkObjectAsync(WorkObjectIdDto idDto,int userId);
-    Task<ResponseBase> GetWorkObjectAsync(WorkObjectIdDto idDto, int userId);
-    Task<ResponseBase> GetAllWorkObjectsAsync(int userId);
-    Task<ResponseBase> AddWorkMonth(AddWorkMonthDto dto, int userId);
+    Task<ResponseBase> AddWorkObject(RequestAddWorkObjectDto dto, int userId);
+    Task<ResponseBase> GetListWorkObjectAsync(int userId);
+    Task<ResponseBase> GetWorkObjectAsync(RequestGetWorkObjectDto dto, int userId);
+    Task<ResponseBase> RemoveWorkObjectAsync(RequestRemoveWorkObjectDto dto, int userId);
+    Task<ResponseBase> AddWorkMonth(RequestAddWorkMonthDto dto, int userId);
 }

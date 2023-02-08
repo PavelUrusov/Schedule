@@ -1,9 +1,8 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchemaDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Responses.WorkSchemaDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkSchemaDtos;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
@@ -20,13 +19,15 @@ public class WorkSchemaService : IWorkSchemaService
         _mapper = mapper;
     }
 
-    public async Task<ResponseBase> AddWorkSchemaAsync(AddWorkSchemaDto dto, int userId)
+    public async Task<ResponseBase> AddWorkSchemaAsync(RequestAddWorkSchemaDto dto, int userId)
     {
+        var formattedStartTime = TimeOnly.Parse(dto.StartTime).ToString("t");
+        var formattedEndTime = TimeOnly.Parse(dto.StartTime).ToString("t");
         var workSchema = new WorkSchema
         {
             Name = dto.Name,
-            StartTime = TimeOnly.Parse(dto.StartTime),
-            EndTime = TimeOnly.Parse(dto.EndTime),
+            StartTime = formattedStartTime,
+            EndTime = formattedEndTime,
             Scheme = dto.Scheme,
             UserId = userId
         };
@@ -40,16 +41,16 @@ public class WorkSchemaService : IWorkSchemaService
         var dtos = await _wsRepository
             .CreateQueryable()
             .Where(wo => wo.UserId == userId)
-            .Select(wo => _mapper.Map<WorkSchema, GetWorkSchemaDto>(wo))
+            .Select(wo => _mapper.Map<WorkSchema, BaseWorkSchemaDto>(wo))
             .ToListAsync();
 
-        return new GetListWorkSchemaDto { Dtos = dtos };
+        return new ResponseListWorkSchemaDto { WorkSchemas = dtos };
     }
 
-    public async Task<ResponseBase> DeleteWorkSchemaAsync(DeleteWorkSchemaDto dto, int userId)
+    public async Task<ResponseBase> DeleteWorkSchemaAsync(RequestRemoveWorkSchemaDto dto, int userId)
     {
         var result =
-            await _wsRepository.FirstOrDefaultAsync(ws => ws != null && ws.Id == dto.Id && ws.UserId == userId);
+            await _wsRepository.FirstOrDefaultAsync(ws => ws!.Id == dto.Id && ws.UserId == userId);
         if (result is null)
             return new ResponseBase("WorkSchema not found", HttpStatusCode.BadRequest);
 

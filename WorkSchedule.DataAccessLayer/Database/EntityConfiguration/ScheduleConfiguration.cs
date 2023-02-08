@@ -10,7 +10,7 @@ public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
     {
         builder.ToTable("Schedules");
         builder.HasKey(s => s.Id);
-        builder.Property(s => s.ScheduleStart).IsRequired();
+        builder.Property(s => s.ScheduleStart).IsRequired().HasMaxLength(255);
         builder.HasOne(s => s.Employee).WithMany(e => e.Schedules).HasForeignKey(s => s.EmployeeId);
         builder.HasOne(s => s.WorkSchema).WithMany(ws => ws.Schedules).HasForeignKey(s => s.WorkSchemaId);
     }

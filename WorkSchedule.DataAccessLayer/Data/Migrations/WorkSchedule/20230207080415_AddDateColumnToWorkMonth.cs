@@ -1,76 +1,74 @@
-﻿using System;
+﻿#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
+namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule;
 
-namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
+public partial class AddDateColumnToWorkMonth : Migration
 {
-    public partial class AddDateColumnToWorkMonth : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropUniqueConstraint(
-                name: "AK_WorkMonths_Month_Year_WorkObjectId",
-                table: "WorkMonths");
+        migrationBuilder.DropUniqueConstraint(
+            "AK_WorkMonths_Month_Year_WorkObjectId",
+            "WorkMonths");
 
-            migrationBuilder.DropIndex(
-                name: "IX_WorkMonths_WorkObjectId",
-                table: "WorkMonths");
+        migrationBuilder.DropIndex(
+            "IX_WorkMonths_WorkObjectId",
+            "WorkMonths");
 
-            migrationBuilder.DropColumn(
-                name: "Month",
-                table: "WorkMonths");
+        migrationBuilder.DropColumn(
+            "Month",
+            "WorkMonths");
 
-            migrationBuilder.DropColumn(
-                name: "Year",
-                table: "WorkMonths");
+        migrationBuilder.DropColumn(
+            "Year",
+            "WorkMonths");
 
-            migrationBuilder.AddColumn<DateOnly>(
-                name: "Date",
-                table: "WorkMonths",
-                type: "date",
-                nullable: false,
-                defaultValue: new DateOnly(1, 1, 1));
+        migrationBuilder.AddColumn<DateOnly>(
+            "Date",
+            "WorkMonths",
+            "date",
+            nullable: false,
+            defaultValue: new DateOnly(1, 1, 1));
 
-            migrationBuilder.AddUniqueConstraint(
-                name: "AK_WorkMonths_WorkObjectId_Date",
-                table: "WorkMonths",
-                columns: new[] { "WorkObjectId", "Date" });
-        }
+        migrationBuilder.AddUniqueConstraint(
+            "AK_WorkMonths_WorkObjectId_Date",
+            "WorkMonths",
+            new[] { "WorkObjectId", "Date" });
+    }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropUniqueConstraint(
-                name: "AK_WorkMonths_WorkObjectId_Date",
-                table: "WorkMonths");
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropUniqueConstraint(
+            "AK_WorkMonths_WorkObjectId_Date",
+            "WorkMonths");
 
-            migrationBuilder.DropColumn(
-                name: "Date",
-                table: "WorkMonths");
+        migrationBuilder.DropColumn(
+            "Date",
+            "WorkMonths");
 
-            migrationBuilder.AddColumn<int>(
-                name: "Month",
-                table: "WorkMonths",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
+        migrationBuilder.AddColumn<int>(
+            "Month",
+            "WorkMonths",
+            "integer",
+            nullable: false,
+            defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(
-                name: "Year",
-                table: "WorkMonths",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
+        migrationBuilder.AddColumn<int>(
+            "Year",
+            "WorkMonths",
+            "integer",
+            nullable: false,
+            defaultValue: 0);
 
-            migrationBuilder.AddUniqueConstraint(
-                name: "AK_WorkMonths_Month_Year_WorkObjectId",
-                table: "WorkMonths",
-                columns: new[] { "Month", "Year", "WorkObjectId" });
+        migrationBuilder.AddUniqueConstraint(
+            "AK_WorkMonths_Month_Year_WorkObjectId",
+            "WorkMonths",
+            new[] { "Month", "Year", "WorkObjectId" });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkMonths_WorkObjectId",
-                table: "WorkMonths",
-                column: "WorkObjectId");
-        }
+        migrationBuilder.CreateIndex(
+            "IX_WorkMonths_WorkObjectId",
+            "WorkMonths",
+            "WorkObjectId");
     }
 }

@@ -138,8 +138,10 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
                     b.Property<int>("EmployeeId")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("ScheduleStart")
-                        .HasColumnType("date");
+                    b.Property<string>("ScheduleStart")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("WorkMonthId")
                         .HasColumnType("integer");
@@ -204,8 +206,10 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("WorkObjectId")
                         .HasColumnType("integer");
@@ -252,8 +256,10 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time without time zone");
+                    b.Property<string>("EndTime")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -265,8 +271,10 @@ namespace WorkSchedule.DataAccessLayer.Data.Migrations.WorkSchedule
                         .HasMaxLength(31)
                         .HasColumnType("integer[]");
 
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time without time zone");
+                    b.Property<string>("StartTime")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");

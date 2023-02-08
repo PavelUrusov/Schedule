@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.RoleDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.TokenDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.UserDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.RoleDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.TokenDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.UserDtos;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
 
 namespace WorkSchedule.WebAPI.Controllers;
@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> RegistrationUser([FromBody] RegisterUserDto dto)
+    public async Task<IActionResult> RegistrationUser([FromBody] RequestRegisterBaseUserDto dto)
     {
         var response = await _identityService.RegistrationAsync(dto);
 
@@ -43,18 +43,18 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> Login([FromBody] LoginUserDto loginUserDto)
+    public async Task<IActionResult> Login([FromBody] RequestLoginBaseUserDto requestLoginBaseUserDto)
     {
-        var response = await _identityService.LoginAsync(loginUserDto);
+        var response = await _identityService.LoginAsync(requestLoginBaseUserDto);
 
         return StatusCode(response.StatusCode, response);
     }
 
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> RefreshToken([FromBody] TokenRequestDto token)
+    public async Task<IActionResult> RefreshToken([FromBody] RequestTokenDto requestToken)
     {
-        var response = await _identityService.RefreshToken(token);
+        var response = await _identityService.RefreshToken(requestToken);
 
         return StatusCode(response.StatusCode, response);
     }

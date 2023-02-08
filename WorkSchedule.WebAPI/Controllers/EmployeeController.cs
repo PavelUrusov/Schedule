@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.EmployeeDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.EmployeeManager;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
@@ -20,7 +20,7 @@ public class EmployeeController : ControllerBase
 
     [HttpPost]
     [Route("[action]")]
-    public async Task<IActionResult> Add([FromBody] AddEmployeeDto request)
+    public async Task<IActionResult> Add([FromBody] RequestAddEmployeeDto request)
     {
         var response = await _employeeManager.AddEmployeeAsync(request, this.UserId()!.Value);
 
@@ -29,7 +29,7 @@ public class EmployeeController : ControllerBase
 
     [HttpPost]
     [Route("[action]")]
-    public async Task<IActionResult> AddList([FromBody] AddListEmployeeDto request)
+    public async Task<IActionResult> AddList([FromBody] RequestAddListEmployeeDto request)
     {
         var response = await _employeeManager.AddEmployeeListAsync(request, this.UserId()!.Value);
 
@@ -38,7 +38,7 @@ public class EmployeeController : ControllerBase
 
     [HttpDelete]
     [Route("[action]")]
-    public async Task<IActionResult> Remove([FromQuery] RemoveEmployeeDto request)
+    public async Task<IActionResult> Remove([FromQuery] RequestRemoveEmployeeDto request)
     {
         var response = await _employeeManager.RemoveEmployeeAsync(request, this.UserId()!.Value);
 
@@ -47,7 +47,7 @@ public class EmployeeController : ControllerBase
 
     [HttpDelete]
     [Route("[action]")]
-    public async Task<IActionResult> RemoveList([FromBody] RemoveListEmployeeDto request)
+    public async Task<IActionResult> RemoveList([FromBody] RequestRemoveListEmployeeDto request)
     {
         var response = await _employeeManager.RemoveListEmployeeAsync(request, this.UserId()!.Value);
 

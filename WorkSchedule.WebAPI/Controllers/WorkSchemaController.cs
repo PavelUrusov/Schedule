@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.Requests.WorkSchemaDtos;
+using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkSchemaDtos;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkSchemaService;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
@@ -20,7 +20,7 @@ public class WorkSchemaController : ControllerBase
 
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] AddWorkSchemaDto request)
+    public async Task<IActionResult> Add([FromBody] RequestAddWorkSchemaDto request)
     {
         var response = await _wsService.AddWorkSchemaAsync(request, this.UserId()!.Value);
 
@@ -38,7 +38,7 @@ public class WorkSchemaController : ControllerBase
 
     [Route("[action]")]
     [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] DeleteWorkSchemaDto request)
+    public async Task<IActionResult> Delete([FromQuery] RequestRemoveWorkSchemaDto request)
     {
         var response = await _wsService.DeleteWorkSchemaAsync(request, this.UserId()!.Value);
 
