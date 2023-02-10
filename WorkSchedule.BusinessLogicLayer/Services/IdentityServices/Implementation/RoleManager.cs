@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
 public class RoleManager : IRoleManager
 {

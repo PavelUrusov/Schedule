@@ -1,8 +1,8 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
+﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkObjectDto;
+using WorkSchedule.BusinessLogicLayer.Shared;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
+namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 
 public interface IWorkObjectService
 {

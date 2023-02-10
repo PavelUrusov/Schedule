@@ -1,4 +1,6 @@
-﻿namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkSchemaDtos;
+﻿using WorkSchedule.BusinessLogicLayer.Shared;
+
+namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkSchemaDtos;
 
 public record ResponseListWorkSchemaDto : ResponseBase
 {

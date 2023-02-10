@@ -1,4 +1,6 @@
-﻿namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.TokenDtos;
+﻿using WorkSchedule.BusinessLogicLayer.Shared;
+
+namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects.TokenDtos;
 
 public record ResponseTokenDto : ResponseBase
 {

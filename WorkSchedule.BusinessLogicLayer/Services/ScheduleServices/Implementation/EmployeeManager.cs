@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
-using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
+using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
+using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.EmployeeManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Implementation;
 
 public class EmployeeManager : IEmployeeManager
 {
@@ -86,6 +86,17 @@ public class EmployeeManager : IEmployeeManager
         return new ResponseBase();
     }
 
+    //TODO
+    public async Task<ResponseBase> GetEmployeeAsync(RequestGetEmployeeDto dto, int userId)
+    {
+        var result =
+            await _empRepository.SingleOrDefaultAsync(e => e!.Id == dto.EmployeeId && e.WorkObject.UserId == userId);
+        if (result is null)
+            return new ResponseBase("Employee not found", HttpStatusCode.BadRequest);
+
+
+        throw new NotImplementedException();
+    }
 
     //TODO WILL CREATE NORMAL DTOS,REFACTOR DTOS.
     /*public async Task<ResponseBase> GetListEmployeeWithSchedulesAsync(GetEmployeeWithSchedulesDto dto, int userId)

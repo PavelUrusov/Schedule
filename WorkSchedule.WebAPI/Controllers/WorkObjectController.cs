@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkObjectDto;
-using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
+using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
 namespace WorkSchedule.WebAPI.Controllers;

@@ -1,16 +1,12 @@
 ﻿using System.Net;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.RoleDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.TokenDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.UserDtos;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordManager;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.TokenService;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.UserManager;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
 public class IdentityService : IIdentityService
 {
@@ -18,7 +14,6 @@ public class IdentityService : IIdentityService
     private readonly IRoleManager _roleManager;
     private readonly ITokenService _tokenService;
     private readonly IUserManager _userManager;
-
 
     public IdentityService(IUserManager userManager, IRoleManager roleManager, ITokenService tokenService,
         IPasswordManager passwordManager)

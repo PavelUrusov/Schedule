@@ -1,4 +1,4 @@
-﻿namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordEncryption;
+﻿namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 
 public interface IPasswordEncryptionService
 {

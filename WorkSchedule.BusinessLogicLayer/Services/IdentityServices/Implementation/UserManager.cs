@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordEncryption;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.UserManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
 public class UserManager : IUserManager
 {

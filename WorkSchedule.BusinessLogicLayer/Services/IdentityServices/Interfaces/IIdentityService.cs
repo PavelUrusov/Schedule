@@ -1,7 +1,7 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.RoleDtos;
+﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.RoleDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.TokenDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.UserDtos;
+using WorkSchedule.BusinessLogicLayer.Shared;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
 

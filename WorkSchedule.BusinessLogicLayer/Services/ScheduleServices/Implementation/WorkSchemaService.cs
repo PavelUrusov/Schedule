@@ -1,12 +1,13 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkSchemaDtos;
+using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
+using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkSchemaService;
+namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Implementation;
 
 public class WorkSchemaService : IWorkSchemaService
 {

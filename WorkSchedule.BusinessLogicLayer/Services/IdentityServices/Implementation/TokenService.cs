@@ -5,11 +5,12 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.TokenService;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
 public class TokenService : ITokenService
 {

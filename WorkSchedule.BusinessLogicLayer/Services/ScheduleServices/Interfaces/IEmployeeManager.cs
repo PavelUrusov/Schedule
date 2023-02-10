@@ -1,7 +1,7 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
+﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
+using WorkSchedule.BusinessLogicLayer.Shared;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.EmployeeManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 
 public interface IEmployeeManager
 {

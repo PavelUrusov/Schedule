@@ -78,4 +78,13 @@ public class WorkScheduleWorkScheduleRepository<T, TKey> :
     {
         return await _dbSet.FirstAsync(predicate);
     }
+
+    public async Task<T?> SingleOrDefaultAsync(Expression<Func<T?, bool>> predicate)
+    {
+        return await _dbSet.SingleOrDefaultAsync(predicate);
+    }
+    public async Task<T> SingleAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.SingleAsync(predicate);
+    }
 }

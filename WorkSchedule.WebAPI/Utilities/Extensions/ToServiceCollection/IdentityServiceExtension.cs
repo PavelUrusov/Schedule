@@ -1,9 +1,5 @@
-﻿using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordEncryption;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordManager;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.RoleManager;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.TokenService;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.UserManager;
+﻿using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 
 namespace WorkSchedule.WebAPI.Utilities.Extensions.ToServiceCollection;
 

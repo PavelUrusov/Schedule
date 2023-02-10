@@ -18,4 +18,6 @@ public interface IWorkScheduleRepository<T, TKey>
     Task InsertRangeAsync(IEnumerable<T> entities);
     Task<T?> FirstOrDefaultAsync(Expression<Func<T?, bool>> predicate);
     Task<T> FirstAsync(Expression<Func<T, bool>> predicate);
+    Task<T?> SingleOrDefaultAsync(Expression<Func<T?, bool>> predicate);
+    Task<T> SingleAsync(Expression<Func<T, bool>> predicate);
 }

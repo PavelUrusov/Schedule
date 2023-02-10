@@ -17,8 +17,4 @@
     <ProjectReference Include="..\WorkSchedule.DataAccessLayer\WorkSchedule.DataAccessLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataTransferObjects\ScheduleDtos\" />
-  </ItemGroup>
-
 </Project>

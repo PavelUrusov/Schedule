@@ -1,6 +1,5 @@
-﻿using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.EmployeeManager;
-using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
-using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkSchemaService;
+﻿using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Implementation;
+using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 
 namespace WorkSchedule.WebAPI.Utilities.Extensions.ToServiceCollection;
 

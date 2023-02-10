@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json.Serialization;
 
-namespace WorkSchedule.BusinessLogicLayer.DataTransferObjects;
+namespace WorkSchedule.BusinessLogicLayer.Shared;
 
 public record ResponseBase
 {

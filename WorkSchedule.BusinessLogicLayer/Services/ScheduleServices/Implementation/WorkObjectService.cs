@@ -1,13 +1,14 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkObjectDto;
+using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
+using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.WorkObjectService;
+namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Implementation;
 
 public class WorkObjectService : IWorkObjectService
 {
@@ -26,7 +27,7 @@ public class WorkObjectService : IWorkObjectService
     public async Task<ResponseBase> AddWorkObject(RequestAddWorkObjectDto dto, int userId)
     {
         var result =
-            await _woRepository.FirstOrDefaultAsync(wo => wo != null && wo.UserId == userId && wo.Name == dto.Name);
+            await _woRepository.FirstOrDefaultAsync(wo => wo!.UserId == userId && wo.Name == dto.Name);
         if (result is not null)
             return new ResponseBase("The Work Object with that name already exist", HttpStatusCode.BadRequest);
 
@@ -50,8 +51,7 @@ public class WorkObjectService : IWorkObjectService
     public async Task<ResponseBase> GetWorkObjectAsync(RequestGetWorkObjectDto dto, int userId)
     {
         var workObject =
-            await _woRepository.FirstOrDefaultAsync(
-                wo => wo != null && wo.UserId == userId && wo.Id == dto.WorkObjectId);
+            await _woRepository.FirstOrDefaultAsync(wo => wo!.UserId == userId && wo.Id == dto.WorkObjectId);
 
         return workObject is null
             ? new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest)
@@ -74,8 +74,7 @@ public class WorkObjectService : IWorkObjectService
     public async Task<ResponseBase> AddWorkMonth(RequestAddWorkMonthDto dto, int userId)
     {
         var formattedDate = DateOnly.Parse(dto.Date).ToString("MM.yyyy");
-        var wo = await _woRepository.FirstOrDefaultAsync(wo =>
-            wo != null && wo.UserId == userId && wo.Id == dto.WorkObjectId);
+        var wo = await _woRepository.FirstOrDefaultAsync(wo => wo!.UserId == userId && wo.Id == dto.WorkObjectId);
         if (wo is null)
             return new ResponseBase("The Work Object not found", HttpStatusCode.BadRequest);
 

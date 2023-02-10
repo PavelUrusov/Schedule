@@ -1,6 +1,6 @@
 ﻿using WorkSchedule.BusinessLogicLayer.Shared;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 
 public interface IPasswordManager
 {

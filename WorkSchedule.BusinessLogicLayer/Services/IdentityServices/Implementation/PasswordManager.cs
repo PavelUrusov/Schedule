@@ -1,7 +1,7 @@
-﻿using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordEncryption;
+﻿using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordManager;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
 public class PasswordManager : IPasswordManager
 {

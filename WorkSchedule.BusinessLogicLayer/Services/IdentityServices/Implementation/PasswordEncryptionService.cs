@@ -1,7 +1,8 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 
-namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.PasswordEncryption;
+namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
 public class PasswordEncryptionService : IPasswordEncryptionService
 {

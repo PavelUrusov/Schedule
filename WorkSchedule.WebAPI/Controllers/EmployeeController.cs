@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
-using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.EmployeeManager;
+using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
 namespace WorkSchedule.WebAPI.Controllers;
@@ -38,7 +38,7 @@ public class EmployeeController : ControllerBase
 
     [HttpDelete]
     [Route("[action]")]
-    public async Task<IActionResult> Remove([FromQuery] RequestRemoveEmployeeDto request)
+    public async Task<IActionResult> Remove([FromBody] RequestRemoveEmployeeDto request)
     {
         var response = await _employeeManager.RemoveEmployeeAsync(request, this.UserId()!.Value);
 
