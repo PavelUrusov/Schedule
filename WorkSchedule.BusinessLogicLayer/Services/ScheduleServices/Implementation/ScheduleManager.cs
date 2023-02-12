@@ -1,25 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
-using WorkSchedule.BusinessLogicLayer.Shared;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects;
 using WorkSchedule.DataAccessLayer.Entities;
-using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
+using WorkSchedule.DataAccessLayer.Repositories.Interfaces;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Implementation;
 
+//TODO
 public class ScheduleManager : IScheduleManager
 {
-    private readonly IWorkScheduleRepository<Schedule, int> _sRepository;
+    private readonly IScheduleRepository _repository;
     private readonly EmployeeManager _empManager;
 
-    public ScheduleManager(IWorkScheduleRepository<Schedule, int> sRepository, EmployeeManager empManager)
+    public ScheduleManager(IScheduleRepository repository, EmployeeManager empManager)
     {
-        _sRepository = sRepository;
+        _repository = repository;
         _empManager = empManager;
     }
-
+    //TODO ДОДЕЛАТЬ ЕГО УЖЕ И СДЕЛАТЬ ВСЕ ТЕСТЫ НА ВСЕ СЕРВИСЫ.
     public Task<ResponseBase> AddScheduleAsync(RequestAddScheduleDto dto, int userId)
     {
         
+        throw new NotImplementedException();
+    }
+
+    public Task<ResponseBase> AddScheduleAsync(RequestAddScheduleDto dto)
+    {
         throw new NotImplementedException();
     }
 }

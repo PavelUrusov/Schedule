@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
-using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
+using WorkSchedule.DataAccessLayer.Repositories.Interfaces;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
@@ -16,11 +16,12 @@ public class TokenService : ITokenService
 {
     private readonly AccessTokenPrincipal _accessTokenPrincipal;
     private readonly RefreshTokenPrincipal _refreshTokenPrincipal;
-    private readonly IWorkScheduleRepository<RefreshToken, int> _tokenRepository;
+    private readonly IRefreshTokenRepository _tokenRepository;
 
-    public TokenService(IOptions<AccessTokenPrincipal> accessTokenPrincipal,
+    public TokenService(
+        IOptions<AccessTokenPrincipal> accessTokenPrincipal,
         IOptions<RefreshTokenPrincipal> refreshTokenPrincipal,
-        IWorkScheduleRepository<RefreshToken, int> tokenRepository)
+        IRefreshTokenRepository tokenRepository)
     {
         _refreshTokenPrincipal = refreshTokenPrincipal.Value;
         _tokenRepository = tokenRepository;
@@ -46,29 +47,6 @@ public class TokenService : ITokenService
         var token = new JwtSecurityTokenHandler().WriteToken(secToken);
 
         return token;
-    }
-
-
-    public virtual async Task<string> CreateRefreshTokenForUserAsync(User user)
-    {
-        var tokens = user.RefreshTokens.ToArray();
-        if (tokens.Length > _refreshTokenPrincipal.MaximumTokensUser)
-        {
-            var result = await DeleteInvalidTokensForUserAsync(user.Id);
-            if (result.IsUnsuccessful) await DeleteOldestTokenForUserAsync(user.Id);
-        }
-
-        var refreshToken = new RefreshToken
-        {
-            ExpireAtUnixTimeSecUtc
-                = DateTimeOffset.UtcNow.AddDays(_refreshTokenPrincipal.TokenLifetimeInDays).ToUnixTimeSeconds(),
-            IsValid = true,
-            Token = GenerateRefreshToken(),
-            UserId = user.Id
-        };
-        await _tokenRepository.InsertAsync(refreshToken);
-
-        return refreshToken.Token;
     }
 
     public virtual Result<ClaimsPrincipal?> GetAccessTokenPrincipalFromExpiredToken(string token)
@@ -99,6 +77,32 @@ public class TokenService : ITokenService
         return refreshToken.Token;
     }
 
+    public virtual async Task AddRefreshTokenForUser(User user, RefreshToken token)
+    {
+        var tokens = user.RefreshTokens.ToArray();
+        if (tokens.Length > _refreshTokenPrincipal.MaximumTokensUser)
+        {
+            var result = await DeleteInvalidTokensForUserAsync(user.Id);
+            if (result.IsUnsuccessful) await DeleteOldestTokenForUserAsync(user.Id);
+        }
+
+        token.UserId = user.Id;
+        await _tokenRepository.InsertAsync(token);
+    }
+
+    public virtual RefreshToken CreateRefreshToken()
+    {
+        var refreshToken = new RefreshToken
+        {
+            ExpireAtUnixTimeSecUtc
+                = DateTimeOffset.UtcNow.AddDays(_refreshTokenPrincipal.TokenLifetimeInDays).ToUnixTimeSeconds(),
+            IsValid = true,
+            Token = GenerateRefreshToken()
+        };
+
+        return refreshToken;
+    }
+
     private string GenerateRefreshToken(int amountOfBytes = 32)
     {
         var randomNumber = new byte[amountOfBytes];
@@ -108,31 +112,48 @@ public class TokenService : ITokenService
         return Convert.ToBase64String(randomNumber);
     }
 
-    private async Task<Result> DeleteInvalidTokensForUserAsync(int userId)
+    protected async Task<Result> DeleteInvalidTokensForUserAsync(int userId)
     {
-        var deleteTokens = await _tokenRepository
-            .CreateQueryable()
-            .Where(rf => rf.UserId == userId &&
-                         (rf.IsValid == false || rf.ExpireAtUnixTimeSecUtc < DateTimeOffset.UtcNow.Second))
-            .ToArrayAsync();
+        var deleteTokens = await FindInvalidTokensFromUserAsync(userId);
+        if (deleteTokens.Count < 0)
+            return new Result("No invalid tokens");
 
         await _tokenRepository.DeleteRangeAsync(deleteTokens);
 
-        return new Result { IsSuccessful = deleteTokens.Length > 0 };
+        return new Result();
     }
 
-    private async Task DeleteOldestTokenForUserAsync(int userId)
+    protected async Task DeleteOldestTokenForUserAsync(int userId)
     {
-        var oldestTokens = _tokenRepository
-            .CreateQueryable()
-            .Where(rf => rf.UserId == userId)
-            .OrderBy(rf => rf.ExpireAtUnixTimeSecUtc)
-            .Take(_refreshTokenPrincipal.MaximumTokensUser / 4);
+        var oldestTokens = await FindOldestTokenFromUserAsync(userId);
         await _tokenRepository.DeleteRangeAsync(oldestTokens);
     }
 
     protected SymmetricSecurityKey CreateSymmetricKey(string secretKey)
     {
         return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+    }
+
+    protected async Task<List<RefreshToken>> FindInvalidTokensFromUserAsync(int userId)
+    {
+        var invalidTokens = await _tokenRepository
+            .AsQueryable()
+            .Where(rf => rf.UserId == userId
+                         && (rf.IsValid == false || rf.ExpireAtUnixTimeSecUtc < DateTimeOffset.UtcNow.Second))
+            .ToListAsync();
+
+        return invalidTokens;
+    }
+
+    protected async Task<List<RefreshToken>> FindOldestTokenFromUserAsync(int userId)
+    {
+        var oldestTokens = await _tokenRepository
+            .AsQueryable()
+            .Where(rf => rf.UserId == userId)
+            .OrderBy(rf => rf.ExpireAtUnixTimeSecUtc)
+            .Take(_refreshTokenPrincipal.MaximumTokensUser / 4)
+            .ToListAsync();
+
+        return oldestTokens;
     }
 }

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.RoleDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.TokenDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.UserDtos;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.RoleDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.TokenDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.UserDtos;
 
 namespace WorkSchedule.WebAPI.Controllers;
 

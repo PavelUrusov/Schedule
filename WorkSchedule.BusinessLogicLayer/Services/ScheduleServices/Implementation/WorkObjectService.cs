@@ -1,57 +1,56 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
-using WorkSchedule.BusinessLogicLayer.Shared;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.DataAccessLayer.Entities;
-using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
+using WorkSchedule.DataAccessLayer.Repositories.Interfaces;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Implementation;
 
 public class WorkObjectService : IWorkObjectService
 {
     private readonly IMapper _mapper;
-    private readonly IWorkScheduleRepository<WorkMonth, int> _wmRepository;
-    private readonly IWorkScheduleRepository<WorkObject, int> _woRepository;
+    private readonly IWorkObjectRepository _repository;
+    private readonly IWorkMonthService _wmService;
 
-    public WorkObjectService(IWorkScheduleRepository<WorkObject, int> woRepository, IMapper mapper,
-        IWorkScheduleRepository<WorkMonth, int> wmRepository)
+    public WorkObjectService(IWorkObjectRepository repository, IMapper mapper,
+        IWorkMonthService wmService)
     {
-        _woRepository = woRepository;
+        _repository = repository;
         _mapper = mapper;
-        _wmRepository = wmRepository;
+        _wmService = wmService;
     }
 
     public async Task<ResponseBase> AddWorkObject(RequestAddWorkObjectDto dto, int userId)
     {
-        var result =
-            await _woRepository.FirstOrDefaultAsync(wo => wo!.UserId == userId && wo.Name == dto.Name);
+        var result = await FindWorkObjectByNameAsync(dto.Name, userId);
         if (result is not null)
-            return new ResponseBase("The Work Object with that name already exist", HttpStatusCode.BadRequest);
+            return new ResponseBase("Work Object with that name already exist", HttpStatusCode.BadRequest);
 
-        var workYear = await GenerateWorkYearAsync(DateTime.Now.Year);
-        var workObject = new WorkObject { Name = dto.Name, UserId = userId, WorkMonths = workYear };
-        await _woRepository.InsertAsync(workObject);
+        var workObject = new WorkObject
+        {
+            Name = dto.Name,
+            UserId = userId,
+            WorkMonths = new List<WorkMonth> { new() { Date = _wmService.CurrentFormattedWorkMonth } }
+        };
+        await _repository.InsertAsync(workObject);
 
         return new ResponseBase();
     }
 
     public async Task<ResponseBase> GetListWorkObjectAsync(int userId)
     {
-        var dtos = await _woRepository.CreateQueryable()
-            .Where(wo => wo.UserId == userId)
-            .Select(wo => _mapper.Map<WorkObject, BaseWorkObjectDto>(wo))
-            .ToListAsync();
+        var workObjects = await FindRangeWorkObjectsByUserIdAsync(userId);
+        var result = _mapper.Map<IEnumerable<WorkObject>, ResponseListWorkObjectDto>(workObjects);
 
-        return new ResponseListWorkObjectDto { WorkObjects = dtos };
+        return result;
     }
 
-    public async Task<ResponseBase> GetWorkObjectAsync(RequestGetWorkObjectDto dto, int userId)
+    public async Task<ResponseBase> FindWorkObjectAsync(RequestGetWorkObjectDto dto, int userId)
     {
-        var workObject =
-            await _woRepository.FirstOrDefaultAsync(wo => wo!.UserId == userId && wo.Id == dto.WorkObjectId);
+        var workObject = await FindWorkObjectByIdAndUserIdAsync(dto.WorkObjectId, userId);
 
         return workObject is null
             ? new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest)
@@ -60,49 +59,28 @@ public class WorkObjectService : IWorkObjectService
 
     public async Task<ResponseBase> RemoveWorkObjectAsync(RequestRemoveWorkObjectDto dto, int userId)
     {
-        var workObject =
-            await _woRepository.FirstOrDefaultAsync(
-                wo => wo != null && wo.Id == dto.WorkObjectId && wo.UserId == userId);
+        var workObject = await FindWorkObjectByIdAndUserIdAsync(dto.WorkObjectId, userId);
         if (workObject is null)
             return new ResponseBase("The workObjectId not found", HttpStatusCode.BadRequest);
 
-        await _woRepository.DeleteAsync(workObject);
+        await _repository.DeleteAsync(workObject);
 
         return new ResponseBase();
     }
 
-    public async Task<ResponseBase> AddWorkMonth(RequestAddWorkMonthDto dto, int userId)
+
+    protected async Task<WorkObject?> FindWorkObjectByIdAndUserIdAsync(int id, int userId)
     {
-        var formattedDate = DateOnly.Parse(dto.Date).ToString("MM.yyyy");
-        var wo = await _woRepository.FirstOrDefaultAsync(wo => wo!.UserId == userId && wo.Id == dto.WorkObjectId);
-        if (wo is null)
-            return new ResponseBase("The Work Object not found", HttpStatusCode.BadRequest);
-
-        var workMonth = new WorkMonth
-        {
-            Date = formattedDate,
-            WorkObjectId = dto.WorkObjectId
-        };
-        await _wmRepository.InsertAsync(workMonth);
-
-        return new ResponseBase();
+        return await _repository.SingleOrDefaultAsync(wo => wo!.UserId == userId && wo.Id == userId);
     }
 
-    private async Task<IEnumerable<WorkMonth>> GenerateWorkYearAsync(int year)
+    protected async Task<WorkObject?> FindWorkObjectByNameAsync(string name, int userId)
     {
-        var task = new Task<List<WorkMonth>>(() =>
-        {
-            var list = new List<WorkMonth>(13);
-            for (var i = 1; i < 13; ++i)
-                list.Add(new WorkMonth
-                {
-                    Date = new DateOnly(year, i, 1).ToString("MM.yyyy")
-                });
+        return await _repository.FirstOrDefaultAsync(wo => wo!.UserId == userId && wo.Name == name);
+    }
 
-            return list;
-        });
-        task.Start();
-
-        return await task;
+    protected async Task<List<WorkObject>> FindRangeWorkObjectsByUserIdAsync(int userId)
+    {
+        return await _repository.AsQueryable().Where(wo => wo.UserId == userId).ToListAsync();
     }
 }

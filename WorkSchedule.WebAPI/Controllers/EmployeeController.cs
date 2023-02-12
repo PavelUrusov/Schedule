@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.EmployeeDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
 namespace WorkSchedule.WebAPI.Controllers;
@@ -50,6 +51,25 @@ public class EmployeeController : ControllerBase
     public async Task<IActionResult> RemoveList([FromBody] RequestRemoveListEmployeeDto request)
     {
         var response = await _employeeManager.RemoveListEmployeeAsync(request, this.UserId()!.Value);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+
+    [HttpGet]
+    [Route("[action]")]
+    public async Task<IActionResult> GetList([FromQuery] RequestGetWorkObjectDto request)
+    {
+        var response = await _employeeManager.GetListEmployeeAsync(request, this.UserId()!.Value);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpGet]
+    [Route("[action]")]
+    public async Task<IActionResult> Get([FromQuery] RequestGetEmployeeDto request)
+    {
+        var response = await _employeeManager.GetEmployeeAsync(request, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }

@@ -1,5 +1,5 @@
-﻿using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkSchemaDtos;
-using WorkSchedule.BusinessLogicLayer.Shared;
+﻿using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkSchemaDtos;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 

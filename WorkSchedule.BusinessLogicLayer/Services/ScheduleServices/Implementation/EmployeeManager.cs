@@ -1,31 +1,32 @@
 ﻿using System.Net;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.EmployeeDtos;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
-using WorkSchedule.BusinessLogicLayer.Shared;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.EmployeeDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.DataAccessLayer.Entities;
-using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
+using WorkSchedule.DataAccessLayer.Repositories.Interfaces;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Implementation;
 
 public class EmployeeManager : IEmployeeManager
 {
-    private readonly IWorkScheduleRepository<Employee, int> _empRepository;
+    private readonly IEmployeeRepository _repository;
     private readonly IMapper _mapper;
     private readonly IWorkObjectService _woService;
 
-    public EmployeeManager(IWorkScheduleRepository<Employee, int> empRepository, IMapper mapper,
+    public EmployeeManager(IEmployeeRepository repository, IMapper mapper,
         IWorkObjectService woService)
     {
-        _empRepository = empRepository;
+        _repository = repository;
         _mapper = mapper;
         _woService = woService;
     }
 
     public async Task<ResponseBase> AddEmployeeAsync(RequestAddEmployeeDto dto, int userId)
     {
-        var result = await _woService.GetWorkObjectAsync(dto.WorkObject, userId);
+        var result = await _woService.FindWorkObjectAsync(dto.WorkObject, userId);
         if (result.IsUnsuccessful)
             return result;
 
@@ -36,14 +37,14 @@ public class EmployeeManager : IEmployeeManager
             Lastname = dto.Lastname,
             WorkObjectId = dto.WorkObject.WorkObjectId
         };
-        await _empRepository.InsertAsync(employee);
+        await _repository.InsertAsync(employee);
 
         return new ResponseBase();
     }
 
     public async Task<ResponseBase> AddEmployeeListAsync(RequestAddListEmployeeDto dto, int userId)
     {
-        var result = await _woService.GetWorkObjectAsync(dto.WorkObject, userId);
+        var result = await _woService.FindWorkObjectAsync(dto.WorkObject, userId);
         if (result.IsUnsuccessful)
             return result;
 
@@ -55,7 +56,7 @@ public class EmployeeManager : IEmployeeManager
                 Lastname = e.Lastname,
                 WorkObjectId = dto.WorkObject.WorkObjectId
             });
-        await _empRepository.InsertRangeAsync(empList);
+        await _repository.InsertRangeAsync(empList);
 
         return new ResponseBase();
     }
@@ -63,55 +64,63 @@ public class EmployeeManager : IEmployeeManager
 
     public async Task<ResponseBase> RemoveEmployeeAsync(RequestRemoveEmployeeDto dto, int userId)
     {
-        var employee =
-            await _empRepository.FirstOrDefaultAsync(emp => emp!.Id == dto.Id && emp.WorkObject.UserId == userId);
+        var employee = await FindEmployeeAsync(dto.Id, userId);
         if (employee is null)
             return new ResponseBase("The employee not found", HttpStatusCode.BadRequest);
 
-        await _empRepository.DeleteAsync(employee);
+        await _repository.DeleteAsync(employee);
 
         return new ResponseBase();
     }
 
     public async Task<ResponseBase> RemoveListEmployeeAsync(RequestRemoveListEmployeeDto dto, int userId)
     {
-        var employeeIds = dto.Employees.Select(x => x.Id);
-        var emps = await _empRepository
-            .CreateQueryable()
-            .Where(emp => employeeIds.Contains(emp.Id) && emp.WorkObject.UserId == userId)
-            .ToListAsync();
+        var employeeIds = dto.Employees.Select(x => x.Id).ToList();
+        var employees = await FindRangeEmployeeAsync(employeeIds, userId);
 
-        await _empRepository.DeleteRangeAsync(emps);
+        if (employees.Count != employeeIds.Count)
+            return new ResponseBase
+            {
+                ErrorMessage = "The list contains non-existent employees", HttpStatusCode = HttpStatusCode.BadRequest
+            };
+
+        await _repository.DeleteRangeAsync(employees);
 
         return new ResponseBase();
     }
 
-    //TODO
     public async Task<ResponseBase> GetEmployeeAsync(RequestGetEmployeeDto dto, int userId)
     {
-        var result =
-            await _empRepository.SingleOrDefaultAsync(e => e!.Id == dto.EmployeeId && e.WorkObject.UserId == userId);
-        if (result is null)
-            return new ResponseBase("Employee not found", HttpStatusCode.BadRequest);
+        var employee = await FindEmployeeAsync(dto.EmployeeId, userId);
 
-
-        throw new NotImplementedException();
+        return employee is null
+            ? new ResponseBase("Employee not found", HttpStatusCode.BadRequest)
+            : _mapper.Map<Employee, ResponseGetEmployeeDto>(employee);
     }
 
-    //TODO WILL CREATE NORMAL DTOS,REFACTOR DTOS.
-    /*public async Task<ResponseBase> GetListEmployeeWithSchedulesAsync(GetEmployeeWithSchedulesDto dto, int userId)
+    public async Task<ResponseBase> GetListEmployeeAsync(RequestGetWorkObjectDto dto, int userId)
     {
-        var result = await _woService.GetWorkObjectAsync(dto, userId);
+        var result = await _woService.FindWorkObjectAsync(dto, userId);
         if (result.IsUnsuccessful)
             return result;
 
-        var emps = await _empRepository.CreateQueryable()
-            .Include(emp => emp.Schedules)
-            .Include(emp => emp.Schedules.Select(x => x.WorkSchema))
-            .Where(emp => emp.WorkObjectId == dto.WorkObjectId)
-            .Select(emp => _mapper.Map<Employee, GetEmployeeDto>(emp))
-            .ToListAsync();
+        var emps = await _repository.FindRangeEmployeeByWorkObjectId(dto.WorkObjectId);
 
-        return new GetListEmployeeDto { Employees = emps };
-    }*/
+        return emps.Count is 0
+            ? new ResponseGetListEmployeeDto { Employees = null, WorkObjectId = dto.WorkObjectId }
+            : _mapper.Map<IEnumerable<Employee>, ResponseGetListEmployeeDto>(emps);
+    }
+
+    protected async Task<Employee?> FindEmployeeAsync(int id, int userId)
+    {
+        return await _repository.SingleOrDefaultAsync(e => e!.Id == id && e.WorkObject.UserId == userId);
+    }
+
+    protected async Task<List<Employee>> FindRangeEmployeeAsync(IEnumerable<int> ids, int userId)
+    {
+        return await _repository
+            .AsQueryable()
+            .Where(emp => ids.Contains(emp.Id) && emp.WorkObject.UserId == userId)
+            .ToListAsync();
+    }
 }

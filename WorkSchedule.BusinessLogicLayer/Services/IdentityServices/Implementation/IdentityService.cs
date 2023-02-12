@@ -1,9 +1,11 @@
 ﻿using System.Net;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.RoleDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.TokenDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.UserDtos;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.RoleDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.TokenDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.UserDtos;
 using WorkSchedule.DataAccessLayer.Entities;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
@@ -33,9 +35,10 @@ public class IdentityService : IIdentityService
         var user = verifyCredentials.Data!;
         var userClaims = _userManager.GetUserClaims(user);
         var accessToken = _tokenService.CreateAccessToken(userClaims);
-        var refreshToken = await _tokenService.CreateRefreshTokenForUserAsync(user);
+        var refreshToken = _tokenService.CreateRefreshToken();
+        await _tokenService.AddRefreshTokenForUser(user, refreshToken);
 
-        return new ResponseTokenDto { AccessToken = accessToken, RefreshToken = refreshToken };
+        return new ResponseTokenDto { AccessToken = accessToken, RefreshToken = refreshToken.Token };
     }
 
     public virtual async Task<ResponseBase> AddRoleAsync(AddRoleDto roleDto)

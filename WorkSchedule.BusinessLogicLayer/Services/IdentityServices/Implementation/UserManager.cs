@@ -3,30 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared;
 using WorkSchedule.DataAccessLayer.Entities;
-using WorkSchedule.DataAccessLayer.Repositories.WorkSchedule;
+using WorkSchedule.DataAccessLayer.Repositories.Interfaces;
 
 namespace WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 
 public class UserManager : IUserManager
 {
     private readonly IPasswordEncryptionService _passwordEncryptionService;
-    private readonly IWorkScheduleRepository<RefreshToken, int> _tokenRepository;
-    private readonly IWorkScheduleRepository<User, int> _userRepository;
+    private readonly IUserRepository _userRepository;
 
-    public UserManager(IWorkScheduleRepository<User, int> userRepository,
-        IPasswordEncryptionService passwordEncryptionService,
-        IWorkScheduleRepository<RefreshToken, int> tokenRepository)
+    public UserManager(
+        IUserRepository userRepository,
+        IPasswordEncryptionService passwordEncryptionService)
     {
         _passwordEncryptionService = passwordEncryptionService;
-        _tokenRepository = tokenRepository;
         _userRepository = userRepository;
     }
 
     public virtual async Task<Result<User?>> FindUserByEmailAsync(string email)
     {
-        var normalizedEmail = email.Normalize();
-        var user = await _userRepository.CreateQueryable()
-            .SingleOrDefaultAsync(x => x.NormalizedEmail == normalizedEmail);
+        var user = await _userRepository.FindByEmailAsync(email);
 
         return user is not null
             ? new Result<User?>(user)
@@ -35,9 +31,9 @@ public class UserManager : IUserManager
 
     public virtual async Task<Result> UpdateUserAsync(User user)
     {
-        var result = await _userRepository.GetByIdAsync(user.Id);
-        if (result is null)
-            return new Result("User not found");
+        var result = await FindUserByIdAsync(user.Id);
+        if (result.IsUnsuccessful)
+            return result;
 
         await _userRepository.UpdateAsync(user);
 
@@ -46,7 +42,7 @@ public class UserManager : IUserManager
 
     public async Task<Result<User?>> FindUserByIdAsync(int id)
     {
-        var user = await _userRepository.GetByIdAsync(id);
+        var user = await _userRepository.FindByIdAsync(id);
 
         return user is not null
             ? new Result<User?>(user)
@@ -55,11 +51,11 @@ public class UserManager : IUserManager
 
     public virtual async Task<Result> CreateNewUserAsync(User user, string password)
     {
+        user.NormalizedEmail = user.Email.Normalize();
         var result = await FindUserByEmailAsync(user.Email);
         if (result.IsSuccessful)
-            return new Result("Email is already registered");
+            return new Result("User is already exist");
 
-        user.NormalizedEmail = user.Email.Normalize();
         user.Password = _passwordEncryptionService.EncryptPassword(password);
         await _userRepository.InsertAsync(user);
 
@@ -68,9 +64,9 @@ public class UserManager : IUserManager
 
     public virtual async Task<Result> DeleteAsync(User user)
     {
-        var result = await _userRepository.GetByIdAsync(user.Id);
-        if (result is null)
-            return new Result("User not found");
+        var result = await FindUserByIdAsync(user.Id);
+        if (result.IsUnsuccessful)
+            return result;
 
         await _userRepository.DeleteAsync(user);
 

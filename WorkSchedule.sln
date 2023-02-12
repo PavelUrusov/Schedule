@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp", "..\TestApp\TestA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkSchedule.BusinessLogicLayer", "WorkSchedule.BusinessLogicLayer\WorkSchedule.BusinessLogicLayer.csproj", "{72BC6BE4-5799-447D-BE85-6967F3D21CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSchedule.WebAPI", "WorkSchedule.WebAPI\WorkSchedule.WebAPI.csproj", "{07CD860F-CB4D-43A4-A083-FD542CA48AA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkSchedule.WebAPI", "WorkSchedule.WebAPI\WorkSchedule.WebAPI.csproj", "{07CD860F-CB4D-43A4-A083-FD542CA48AA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

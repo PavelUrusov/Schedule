@@ -1,4 +1,5 @@
-﻿using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
+﻿using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
+using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Implementation;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 
 namespace WorkSchedule.WebAPI.Utilities.Extensions.ToServiceCollection;

@@ -9,4 +9,5 @@ public interface IRoleManager
     Task<Result<Role?>> FindByNameAsync(string name);
     Task<Result> UpdateRoleAsync(Role role);
     Task<Result> DeleteRoleAsync(int id);
+    Task<Result<Role?>> FindByIdAsync(int roleId);
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkMothDtos;
-using WorkSchedule.BusinessLogicLayer.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkMothDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
 namespace WorkSchedule.WebAPI.Controllers;
@@ -41,7 +41,7 @@ public class WorkObjectController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] RequestGetWorkObjectDto dto)
     {
-        var response = await _woService.GetWorkObjectAsync(dto, this.UserId()!.Value);
+        var response = await _woService.FindWorkObjectAsync(dto, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }
@@ -55,6 +55,8 @@ public class WorkObjectController : ControllerBase
         return StatusCode(response.StatusCode, response);
     }
 
+    //TODO Will be create WorkMonthController
+    /*
     [Route("[action]")]
     [HttpPost]
     public async Task<IActionResult> AddWorkMonth([FromBody] RequestAddWorkMonthDto dto)
@@ -62,5 +64,5 @@ public class WorkObjectController : ControllerBase
         var response = await _woService.AddWorkMonth(dto, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
-    }
+    }*/
 }

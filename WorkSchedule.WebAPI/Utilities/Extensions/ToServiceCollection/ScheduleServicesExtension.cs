@@ -10,6 +10,9 @@ public static class ScheduleServicesExtension
         services.AddScoped(typeof(IWorkObjectService), typeof(WorkObjectService));
         services.AddScoped(typeof(IWorkSchemaService), typeof(WorkSchemaService));
         services.AddScoped(typeof(IEmployeeManager), typeof(EmployeeManager));
+        services.AddScoped(typeof(IWorkMonthService), typeof(WorkMonthService));
+        services.AddScoped(typeof(IScheduleManager), typeof(ScheduleManager));
+
         return services;
     }
 }
