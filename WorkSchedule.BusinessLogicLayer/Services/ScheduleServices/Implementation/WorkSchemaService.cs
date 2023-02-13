@@ -35,7 +35,7 @@ public class WorkSchemaService : IWorkSchemaService
         return new ResponseBase();
     }
 
-    public async Task<ResponseBase> GetListWorkSchemaAsync(int userId)
+    public async Task<ResponseBase> FindRangeWorkSchemaAsync(int userId)
     {
         var workSchemas = await FindRangeWorkSchemasByUserId(userId);
 
@@ -53,6 +53,15 @@ public class WorkSchemaService : IWorkSchemaService
         return new ResponseBase();
     }
 
+    public async Task<ResponseBase> FindWorkSchemaAsync(RequestGetWorkSchemaDto dto, int userId)
+    {
+        var workSchema = await FindWorkSchemaByIdAndUserId(dto.Id, userId);
+
+        return workSchema is null
+            ? new ResponseBase("Work schema not found", HttpStatusCode.BadRequest)
+            : _mapper.Map<WorkSchema, ResponseGetWoGrkSchemaDto>(workSchema);
+    }
+
     protected string FormattedTime(string time)
     {
         return TimeOnly.Parse(time).ToString("t");
@@ -65,6 +74,6 @@ public class WorkSchemaService : IWorkSchemaService
 
     protected async Task<WorkSchema?> FindWorkSchemaByIdAndUserId(int id, int userId)
     {
-        return await  _repository.SingleOrDefaultAsync(ws => ws!.Id == id && ws.UserId == userId);
+        return await _repository.SingleOrDefaultAsync(ws => ws!.Id == id && ws.UserId == userId);
     }
 }

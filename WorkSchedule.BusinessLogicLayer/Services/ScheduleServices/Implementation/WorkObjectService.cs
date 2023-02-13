@@ -71,7 +71,7 @@ public class WorkObjectService : IWorkObjectService
 
     protected async Task<WorkObject?> FindWorkObjectByIdAndUserIdAsync(int id, int userId)
     {
-        return await _repository.SingleOrDefaultAsync(wo => wo!.UserId == userId && wo.Id == userId);
+        return await _repository.SingleOrDefaultAsync(wo => wo!.UserId == userId && wo.Id == id);
     }
 
     protected async Task<WorkObject?> FindWorkObjectByNameAsync(string name, int userId)

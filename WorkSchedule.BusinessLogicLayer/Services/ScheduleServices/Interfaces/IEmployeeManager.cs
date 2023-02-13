@@ -10,6 +10,6 @@ public interface IEmployeeManager
     Task<ResponseBase> AddEmployeeListAsync(RequestAddListEmployeeDto dto, int userId);
     Task<ResponseBase> RemoveEmployeeAsync(RequestRemoveEmployeeDto dto, int userId);
     Task<ResponseBase> RemoveListEmployeeAsync(RequestRemoveListEmployeeDto dto, int userId);
-    Task<ResponseBase> GetEmployeeAsync(RequestGetEmployeeDto dto, int userId);
+    Task<ResponseBase> FindEmployeeAsync(RequestGetEmployeeDto dto, int userId);
     Task<ResponseBase> GetListEmployeeAsync(RequestGetWorkObjectDto dto, int userId);
 }

@@ -7,7 +7,7 @@ using WorkSchedule.WebAPI.Utilities.Extensions.ToControllerBase;
 
 namespace WorkSchedule.WebAPI.Controllers;
 
-[Authorize("User")]
+[Authorize(Policy = "User")]
 [Route("api/[controller]")]
 [ApiController]
 public class EmployeeController : ControllerBase
@@ -69,7 +69,7 @@ public class EmployeeController : ControllerBase
     [Route("[action]")]
     public async Task<IActionResult> Get([FromQuery] RequestGetEmployeeDto request)
     {
-        var response = await _employeeManager.GetEmployeeAsync(request, this.UserId()!.Value);
+        var response = await _employeeManager.FindEmployeeAsync(request, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }

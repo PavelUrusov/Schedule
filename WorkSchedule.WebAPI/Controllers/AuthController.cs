@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.IdentityService;
-using WorkSchedule.BusinessLogicLayer.Services.IdentityServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.RoleDtos;
 using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.TokenDtos;
 using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.UserDtos;

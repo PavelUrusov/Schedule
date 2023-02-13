@@ -89,7 +89,7 @@ public class EmployeeManager : IEmployeeManager
         return new ResponseBase();
     }
 
-    public async Task<ResponseBase> GetEmployeeAsync(RequestGetEmployeeDto dto, int userId)
+    public async Task<ResponseBase> FindEmployeeAsync(RequestGetEmployeeDto dto, int userId)
     {
         var employee = await FindEmployeeAsync(dto.EmployeeId, userId);
 

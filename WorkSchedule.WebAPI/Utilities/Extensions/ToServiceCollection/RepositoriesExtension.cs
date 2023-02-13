@@ -7,7 +7,6 @@ public static class RepositoriesExtension
 {
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseBaseRepository<,>));
         services.AddScoped(typeof(IEmployeeRepository), typeof(EmployeeRepository));
         services.AddScoped(typeof(IRefreshTokenRepository), typeof(RefreshTokenRepository));
         services.AddScoped(typeof(IRoleRepository), typeof(RoleRepository));
