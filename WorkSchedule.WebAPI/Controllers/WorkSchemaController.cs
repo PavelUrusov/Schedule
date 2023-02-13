@@ -29,7 +29,7 @@ public class WorkSchemaController : ControllerBase
 
     [Route("[action]")]
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetList()
     {
         var response = await _wsService.FindRangeWorkSchemaAsync(this.UserId()!.Value);
 

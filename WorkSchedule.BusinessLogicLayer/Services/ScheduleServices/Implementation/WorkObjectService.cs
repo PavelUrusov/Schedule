@@ -13,14 +13,11 @@ public class WorkObjectService : IWorkObjectService
 {
     private readonly IMapper _mapper;
     private readonly IWorkObjectRepository _repository;
-    private readonly IWorkMonthService _wmService;
 
-    public WorkObjectService(IWorkObjectRepository repository, IMapper mapper,
-        IWorkMonthService wmService)
+    public WorkObjectService(IWorkObjectRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _wmService = wmService;
     }
 
     public async Task<ResponseBase> AddWorkObject(RequestAddWorkObjectDto dto, int userId)
@@ -33,7 +30,7 @@ public class WorkObjectService : IWorkObjectService
         {
             Name = dto.Name,
             UserId = userId,
-            WorkMonths = new List<WorkMonth> { new() { Date = _wmService.CurrentFormattedWorkMonth } }
+            WorkMonths = new List<WorkMonth> { new() { Date = IWorkMonthService.CurrentFormattedWorkMonth } }
         };
         await _repository.InsertAsync(workObject);
 

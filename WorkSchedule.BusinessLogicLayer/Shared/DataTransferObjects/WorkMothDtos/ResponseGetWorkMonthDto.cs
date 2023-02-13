@@ -10,7 +10,6 @@ public record ResponseGetWorkMonthDto : ResponseBase, IMapWith<WorkMonth>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<WorkMonth, ResponseGetWorkMonthDto>()
-            .ForMember(dto => dto.WorkMonth, opt => opt.MapFrom(x => x));
+        profile.CreateMap<WorkMonth, ResponseGetWorkMonthDto>();
     }
 }

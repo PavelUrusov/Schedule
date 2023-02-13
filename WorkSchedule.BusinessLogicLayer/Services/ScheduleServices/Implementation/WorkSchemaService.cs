@@ -59,7 +59,7 @@ public class WorkSchemaService : IWorkSchemaService
 
         return workSchema is null
             ? new ResponseBase("Work schema not found", HttpStatusCode.BadRequest)
-            : _mapper.Map<WorkSchema, ResponseGetWoGrkSchemaDto>(workSchema);
+            : _mapper.Map<WorkSchema, ResponseGetWorkSchemaDto>(workSchema);
     }
 
     protected string FormattedTime(string time)

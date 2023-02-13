@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects;
 using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkMothDtos;
+using WorkSchedule.BusinessLogicLayer.Shared.DataTransferObjects.WorkObjectDto;
 using WorkSchedule.DataAccessLayer.Entities;
 using WorkSchedule.DataAccessLayer.Repositories.Interfaces;
 
@@ -13,11 +14,16 @@ public class WorkMonthService : IWorkMonthService
 {
     private readonly IMapper _mapper;
     private readonly IWorkMonthRepository _repository;
+    private readonly IWorkObjectService _woService;
 
-    public WorkMonthService(IWorkMonthRepository repository, IMapper mapper)
+    public WorkMonthService(
+        IWorkMonthRepository repository,
+        IMapper mapper,
+        IWorkObjectService woService)
     {
         _repository = repository;
         _mapper = mapper;
+        _woService = woService;
     }
 
     public async Task<ResponseBase> AddWorkMonthAsync(RequestAddWorkMonthDto dto, int userId)
@@ -49,6 +55,18 @@ public class WorkMonthService : IWorkMonthService
             : _mapper.Map<WorkMonth, ResponseGetWorkMonthDto>(workMonth);
     }
 
+    public async Task<ResponseBase> FindRangeWorkMonthAsync(RequestGetRangeWorkMonthDto dto, int userId)
+    {
+        var workObject = await _woService
+            .FindWorkObjectAsync(new RequestGetWorkObjectDto { WorkObjectId = dto.WorkObjectId }, userId);
+        if (workObject.IsUnsuccessful)
+            return workObject;
+
+        var workMonths = await FindRangeWorkMonthAsync(dto.WorkObjectId, userId);
+
+        return _mapper.Map<IEnumerable<WorkMonth>, ResponseGetListWorkMonthsDto>(workMonths);
+    }
+
     protected bool TryParseDateString(string dateInput, out string? formattedDate)
     {
         var parseSuccess = DateTime.TryParse(dateInput, out var parsedDateTime);
@@ -70,6 +88,15 @@ public class WorkMonthService : IWorkMonthService
     protected async Task<WorkMonth?> FindWorkMonthByDateAndWorkObjectIdAsync(string date, int workObjectId)
     {
         return await _repository.SingleOrDefaultAsync(wm => wm!.WorkObjectId == workObjectId && wm.Date == date);
+    }
+
+    protected async Task<IEnumerable<WorkMonth>> FindRangeWorkMonthAsync(int workObjectId, int userId)
+    {
+        return await _repository
+            .AsQueryable()
+            .Include(vm => vm.WorkObject)
+            .Where(wm => wm.WorkObjectId == workObjectId && wm.WorkObject.UserId == userId)
+            .ToListAsync();
     }
 
     protected async Task<bool> WorkMonthIsAlreadyExist(string date, int workObjectId, int userId)

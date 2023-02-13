@@ -17,11 +17,30 @@ public class ScheduleController : ControllerBase
     {
         _scheduleManager = scheduleManager;
     }
+
     [Route("[action]")]
     [HttpPost]
-    public async Task<IActionResult> AddSchedule(RequestAddScheduleDto request)
+    public async Task<IActionResult> AddSchedule([FromBody]RequestAddScheduleDto request)
     {
         var response = await _scheduleManager.AddScheduleAsync(request, this.UserId()!.Value);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [Route("[action]")]
+    [HttpGet]
+    public async Task<IActionResult> GetSchedule([FromQuery]RequestGetScheduleDto request)
+    {
+        var response = await _scheduleManager.GetScheduleAsync(request, this.UserId()!.Value);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [Route("[action]")]
+    [HttpGet]
+    public async Task<IActionResult> GetList([FromQuery] RequestGetRangeSchedulesDto request)
+    {
+        var response = await _scheduleManager.GetRangeSchedulesAsync(request, this.UserId()!.Value);
 
         return StatusCode(response.StatusCode, response);
     }

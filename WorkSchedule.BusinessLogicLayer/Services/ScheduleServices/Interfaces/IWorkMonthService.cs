@@ -6,8 +6,9 @@ namespace WorkSchedule.BusinessLogicLayer.Services.ScheduleServices.Interfaces;
 
 public interface IWorkMonthService
 {
-    string CurrentFormattedWorkMonth => DateTime.UtcNow.ToString("MM.yyyy");
+    static string CurrentFormattedWorkMonth => DateTime.UtcNow.ToString("MM.yyyy");
 
     Task<ResponseBase> AddWorkMonthAsync(RequestAddWorkMonthDto dto, int userId);
     Task<ResponseBase> FindWorkMonthAsync(RequestGetWorkMonthDto dto, int userId);
+    Task<ResponseBase> FindRangeWorkMonthAsync(RequestGetRangeWorkMonthDto dto, int userId);
 }
